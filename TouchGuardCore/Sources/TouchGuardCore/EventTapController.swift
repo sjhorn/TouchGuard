@@ -38,6 +38,8 @@ public final class EventTapController {
 
     public var blockedClicks: Int { filter.blockedClicks }
     public private(set) var rearmCount = 0
+    /// SPIKE: proves key-ups reach the tap.
+    public private(set) var keyUps = 0
 
     public var onStateChange: ((State) -> Void)?
     /// Called for each blocked mouse-down, with the new total.
@@ -54,6 +56,16 @@ public final class EventTapController {
     private var watchdog: Timer?
 
     public static let watchdogInterval: TimeInterval = 2
+
+    /// SPIKE: which tap location to try; switchable from the menu.
+    public var useSessionTap = false {
+        didSet {
+            guard useSessionTap != oldValue, isEnabled else { return }
+            teardown()
+            install()
+        }
+    }
+    public private(set) var lastCreateError: String?
 
     private static let eventMask: CGEventMask = {
         let types: [CGEventType] = [
@@ -100,7 +112,7 @@ public final class EventTapController {
         }
         let refcon = Unmanaged.passUnretained(self).toOpaque()
         guard let port = CGEvent.tapCreate(
-            tap: .cghidEventTap,
+            tap: useSessionTap ? .cgSessionEventTap : .cghidEventTap,
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: Self.eventMask,
@@ -112,6 +124,8 @@ public final class EventTapController {
             },
             userInfo: refcon
         ) else {
+            lastCreateError = "tapCreate returned nil (listen=\(Accessibility.canListen), post=\(Accessibility.canPost), session=\(useSessionTap))"
+            NSLog("TouchGuard spike: %@", lastCreateError!)
             state = Accessibility.isTrusted ? .failed : .needsPermission
             return
         }
@@ -120,6 +134,8 @@ public final class EventTapController {
         CGEvent.tapEnable(tap: port, enable: true)
         tap = port
         source = src
+        lastCreateError = nil
+        NSLog("TouchGuard spike: tap created (session=%d, sandboxed=%d)", useSessionTap ? 1 : 0, Accessibility.isSandboxed ? 1 : 0)
         state = .running
     }
 
@@ -155,6 +171,7 @@ public final class EventTapController {
             rearm(.userInput)
             return true
         case .keyUp:
+            keyUps += 1
             filter.keyReleased(at: now)
             onKeyRelease?(filter.blockUntil)
             return true

@@ -24,6 +24,10 @@ final class AppModel {
     private(set) var blockedClicks = 0
     private(set) var launchAtLogin = false
     private(set) var launchAtLoginError: String?
+    // SPIKE diagnostics
+    private(set) var keyUps = 0
+    private(set) var rearms = 0
+    private(set) var useSessionTap = false
 
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let controller: EventTapController
@@ -46,6 +50,22 @@ final class AppModel {
 
         controller.onStateChange = { [weak self] state in self?.stateChanged(to: state) }
         controller.onBlock = { [weak self] total in self?.blockedClicks = total }
+        controller.onKeyRelease = { [weak self] _ in self?.keyUps = self?.controller.keyUps ?? 0 }
+        controller.onRearm = { [weak self] reason in
+            self?.rearms = self?.controller.rearmCount ?? 0
+            NSLog("TouchGuard spike: rearm %@", String(describing: reason))
+        }
+    }
+
+    var spikeInfo: String {
+        "sandboxed=\(Accessibility.isSandboxed) listen=\(Accessibility.canListen) post=\(Accessibility.canPost)"
+    }
+
+    var spikeError: String? { controller.lastCreateError }
+
+    func setUseSessionTap(_ on: Bool) {
+        useSessionTap = on
+        controller.useSessionTap = on
     }
 
     /// Called once the app has finished launching.

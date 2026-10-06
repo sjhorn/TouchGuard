@@ -1,4 +1,5 @@
 import SwiftUI
+import TouchGuardCore
 
 struct MenuContent: View {
     let model: AppModel
@@ -35,6 +36,15 @@ struct MenuContent: View {
             Text("Launch at login failed: \(error)")
         }
         Toggle("Global Shortcut ⌃⌥⌘T", isOn: Binding(get: { model.hotKeyEnabled }, set: { model.setHotKeyEnabled($0) }))
+
+        Divider()
+
+        // SPIKE diagnostics
+        Text(model.spikeInfo)
+        Text("Key-ups seen: \(model.keyUps), rearms: \(model.rearms)")
+        if let error = model.spikeError { Text(error) }
+        Toggle("Use Session Tap (vs HID)", isOn: Binding(get: { model.useSessionTap }, set: { model.setUseSessionTap($0) }))
+        Button("Request Listen + Post Access") { Accessibility.requestPrompt() }
 
         Divider()
 

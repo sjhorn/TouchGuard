@@ -1,23 +1,30 @@
 import AppKit
 import ApplicationServices
+import CoreGraphics
 
-/// Helpers for the Accessibility (TCC) permission an active event tap needs.
+/// SPIKE: permission helpers for a sandboxed build, using Input Monitoring
+/// (listen) and post-event access instead of full Accessibility.
 public enum Accessibility {
-    public static var isTrusted: Bool {
-        AXIsProcessTrusted()
+    public static var isSandboxed: Bool {
+        ProcessInfo.processInfo.environment["APP_SANDBOX_CONTAINER_ID"] != nil
     }
 
-    /// Shows the system prompt (once per process) and adds this app to the
-    /// Accessibility list. Returns the current trust state.
+    public static var canListen: Bool { CGPreflightListenEventAccess() }
+    public static var canPost: Bool { CGPreflightPostEventAccess() }
+
+    public static var isTrusted: Bool {
+        canListen && canPost
+    }
+
     @discardableResult
     public static func requestPrompt() -> Bool {
-        // The literal value of kAXTrustedCheckOptionPrompt; the global is not concurrency-safe in Swift 6.
-        let options = ["AXTrustedCheckOptionPrompt": true] as CFDictionary
-        return AXIsProcessTrustedWithOptions(options)
+        let listen = CGRequestListenEventAccess()
+        let post = CGRequestPostEventAccess()
+        return listen && post
     }
 
     public static let settingsURL = URL(
-        string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
+        string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent")!
 
     public static func openSettings() {
         NSWorkspace.shared.open(settingsURL)

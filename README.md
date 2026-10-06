@@ -1,5 +1,12 @@
 # TouchGuard
 
+![TouchGuard: stop accidental trackpad clicks while you type](docs/images/banner.png)
+
+[![CI](https://github.com/sjhorn/TouchGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/sjhorn/TouchGuard/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/sjhorn/TouchGuard?sort=semver)](https://github.com/sjhorn/TouchGuard/releases/latest)
+![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 **Stop accidental trackpad clicks while you type.**
 
 TouchGuard holds back trackpad clicks for a moment after each key release. A palm brushing the trackpad mid-sentence no longer counts as a tap, so the cursor stays where you're typing.
@@ -113,17 +120,22 @@ TouchGuardCLI/          command-line tool
 TouchGuardTests/        app model tests
 Config/                 Info.plist fragments
 scripts/                release, version bump
-docs/                   GitHub Pages site, appcast, App Store listing
+docs/                   GitHub Pages site, appcast, App Store listing, architecture
+.github/                CI and release workflows, issue and PR templates
 ```
 
 ## Releasing
 
 Releases are made by [`scripts/release.sh`](scripts/release.sh), either locally or by GitHub Actions when a `v*` tag is pushed. See [docs/RELEASING.md](docs/RELEASING.md).
 
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests and guidelines, and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how it works. This project follows a [Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Support
 
-Questions, bugs and ideas: [open an issue](https://github.com/sjhorn/TouchGuard/issues). Common questions are answered on the [support page](https://sjhorn.github.io/TouchGuard/support). Security reports: see [SECURITY.md](SECURITY.md).
+Questions, bugs and ideas: [open an issue](https://github.com/sjhorn/TouchGuard/issues/new/choose). Common questions are answered on the [support page](https://sjhorn.github.io/TouchGuard/support/). Security reports: see [SECURITY.md](SECURITY.md). More in [SUPPORT.md](SUPPORT.md).
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+MIT. See [LICENSE](LICENSE). Third-party notices and credit for the original TouchGuard are in [NOTICE](NOTICE).

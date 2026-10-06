@@ -2,7 +2,7 @@
 title: TouchGuard
 ---
 
-# TouchGuard
+![TouchGuard](images/banner.png)
 
 **Stop accidental trackpad clicks while you type.**
 

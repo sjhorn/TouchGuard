@@ -26,7 +26,7 @@ cd "$root"
 project=TouchGuard.xcodeproj
 team=ZUKW8RPUVQ
 out=build/release
-derived=$out/DerivedData
+derived=$out/DerivedData-$mode  # separate per channel, so no build products are shared
 repo_url=https://github.com/sjhorn/TouchGuard
 
 project_version=$(sed -nE 's/.*MARKETING_VERSION = ([^;]+);/\1/p' "$project/project.pbxproj" | head -1)

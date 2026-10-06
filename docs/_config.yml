@@ -5,3 +5,4 @@ exclude:
   - app-store
   - notes
   - RELEASING.md
+  - ARCHITECTURE.md

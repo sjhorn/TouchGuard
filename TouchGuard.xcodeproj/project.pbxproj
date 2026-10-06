@@ -65,6 +65,7 @@
 		7A0000000000000000000024 /* Exceptions for "TouchGuardApp" folder in "TouchGuardMAS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Licenses/Sparkle-LICENSE.txt,
 				TouchGuardApp.entitlements,
 				TouchGuardMAS.entitlements,
 			);

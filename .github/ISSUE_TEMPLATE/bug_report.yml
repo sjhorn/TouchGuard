@@ -1,0 +1,55 @@
+name: Bug report
+description: TouchGuard isn't working as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check the [FAQ](https://sjhorn.github.io/TouchGuard/support/) first. Most permission problems are covered there.
+        **Security issue?** Please don't file it here; see [SECURITY.md](https://github.com/sjhorn/TouchGuard/blob/master/SECURITY.md).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Set the delay to 200 ms
+        2. Type in TextEdit and tap the trackpad
+        3. …
+  - type: input
+    id: version
+    attributes:
+      label: TouchGuard version
+      description: Menu → About TouchGuard, or `touchguard -version`
+      placeholder: 2.0.0 (42)
+    validations:
+      required: true
+  - type: dropdown
+    id: channel
+    attributes:
+      label: Where did you get it?
+      options:
+        - Download from GitHub (DMG)
+        - Mac App Store
+        - Built from source
+        - Command-line tool
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac
+      placeholder: macOS 26.1, MacBook Air M3
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots, the menu's status line, the blocked-click count, or CLI output.

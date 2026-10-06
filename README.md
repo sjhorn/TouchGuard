@@ -1,32 +1,30 @@
 # TouchGuard
 
-Blocks trackpad clicks for a short moment after each key release, so a palm brushing the trackpad while you type doesn't count as a tap and send the cursor somewhere else.
+**Stop accidental trackpad clicks while you type.**
 
-TouchGuard comes as a **menu bar app** and a **command-line tool** (`touchguard`). Both use the same Swift core.
+TouchGuard holds back trackpad clicks for a moment after each key release. A palm brushing the trackpad mid-sentence no longer counts as a tap, so the cursor stays where you're typing.
 
-Originally written by SyntaxSoft in 2016 ([thesyntaxinator/TouchGuard](https://github.com/thesyntaxinator/TouchGuard)).
+It lives in the menu bar and has a command-line tool (`touchguard`) for scripting. Both share the same small Swift core. TouchGuard is free and open source under the [MIT licence](LICENSE).
 
-## Requirements
+Based on the original [TouchGuard by SyntaxSoft](https://github.com/thesyntaxinator/TouchGuard) (2016). See [NOTICE](NOTICE).
 
-- macOS 14 or later
-- Xcode 16 or later to build (the project is set up for Xcode 27)
+## Install
 
-## Menu bar app
+- **Download (recommended):** get `TouchGuard-<version>.dmg` from [Releases](https://github.com/sjhorn/TouchGuard/releases), open it, and drag TouchGuard to Applications. The app is signed with Developer ID and notarised by Apple. It updates itself with Sparkle (**Check for Updates…** in the menu).
+- **Homebrew:** coming later.
+- **Mac App Store:** submitted on a best-effort basis; this README will link it if Apple approves it. The App Store version is sandboxed, has no command-line tool and is updated by the store.
 
-Build and run the `TouchGuard` scheme in Xcode, or:
+Requires macOS 14 Sonoma or later, on Apple silicon or Intel.
 
-```sh
-xcodebuild -scheme TouchGuard -configuration Release -derivedDataPath build/DD build
-open build/DD/Build/Products/Release/TouchGuard.app
-```
+## Using it
 
-TouchGuard runs only in the menu bar and has no Dock icon. The menu bar icon shows its state:
+TouchGuard runs only in the menu bar and has no Dock icon. The icon shows its state:
 
 | Icon | Meaning |
 |------|---------|
 | ✋ `hand.raised` | Active: clicks are held back after typing |
 | `hand.raised.slash` | Paused |
-| ⚠️ `exclamationmark.triangle` | Needs Accessibility permission, or the event tap couldn't start |
+| ⚠️ `exclamationmark.triangle` | Needs permission, or the event tap couldn't start |
 
 The menu has:
 
@@ -36,29 +34,38 @@ The menu has:
 - **Blocked clicks**, a count of the clicks held back, with **Reset Count**
 - **Launch at Login**
 - **Global Shortcut ⌃⌥⌘T**, to turn the hotkey on or off
-- About, Quit
+- **Check for Updates…** (download version only), About, Quit
 
-Settings are remembered between launches. The default delay is 200 ms.
+Settings are remembered between launches. The default delay is 200 ms. If the cursor still jumps, try a longer delay. If the trackpad feels slow after typing, try a shorter one.
 
-### Permission
+## Permissions
 
-TouchGuard needs **Accessibility** permission (System Settings → Privacy & Security → Accessibility) so it can see key releases and hold back clicks. It never reads, records or sends what you type. On first launch a window explains this and has a button that opens the right Settings page. Once you turn TouchGuard on, the window closes by itself and blocking starts. If the permission is removed later, the window comes back.
+TouchGuard has to notice key releases and briefly hold back clicks, and macOS only allows that with your permission. **It never reads, records or sends what you type.** It only checks *that* a key was released.
 
-No `sudo` or administrator rights are needed.
+| Version | Permission | Where |
+|---------|-----------|-------|
+| Download (Developer ID) | Accessibility | System Settings → Privacy & Security → Accessibility |
+| Mac App Store | Input Monitoring, plus Accessibility for holding back clicks | System Settings → Privacy & Security → Input Monitoring / Accessibility |
 
-> **Building it yourself:** macOS ties the Accessibility grant to the app's code signature. The project signs with a fixed "Apple Development" identity (team set in `DEVELOPMENT_TEAM`), so the grant survives rebuilds. If you change the team or switch to ad-hoc signing, expect to grant permission again. If TouchGuard is listed as allowed but the window won't go away, remove it from the list with **−** and add it again.
+On first launch a window explains this and opens the right Settings page. Once you turn TouchGuard on, the window closes by itself and blocking starts. If the permission is removed later, the window comes back. No administrator rights are needed.
+
+If TouchGuard is listed as allowed but the window stays open, remove it from the list with **−** and add it again. This usually happens after replacing the app with a build signed differently.
 
 ### Reliability
 
-macOS sometimes switches event taps off, for example when a callback is slow or around secure text input such as password fields. TouchGuard turns its tap back on at once when that happens. A watchdog also checks every 2 seconds, so blocking doesn't silently stop the way it could in older versions.
+macOS sometimes switches event taps off, for example when a callback is slow or around secure text input such as password fields. TouchGuard turns its tap back on at once when that happens. A watchdog also checks every 2 seconds, so blocking doesn't silently stop the way it could in 1.x.
+
+## Privacy
+
+TouchGuard collects no data. It has no analytics and no accounts, and it sends nothing anywhere. The only network request is the download version's update check, which fetches the [appcast](https://sjhorn.github.io/TouchGuard/appcast.xml) from GitHub Pages. See the [privacy policy](https://sjhorn.github.io/TouchGuard/privacy).
 
 ## Command-line tool
 
-Build the `TouchGuardCLI` scheme. It produces a `touchguard` binary:
+The download version includes the CLI inside the app. To put it on your `PATH`:
 
 ```sh
-xcodebuild -scheme TouchGuardCLI -configuration Release -derivedDataPath build/DD build
-build/DD/Build/Products/Release/touchguard -time 0.2
+sudo ln -sf /Applications/TouchGuard.app/Contents/Helpers/touchguard /usr/local/bin/touchguard
+touchguard -time 0.2
 ```
 
 | Option | Meaning |
@@ -70,26 +77,52 @@ build/DD/Build/Products/Release/touchguard -time 0.2
 | `-version` | Print the version |
 | `-h` | Show help |
 
-For the CLI, the Accessibility permission belongs to the app you run it from (Terminal, iTerm, …). If that app isn't allowed, `touchguard` names it, opens the system prompt, and exits with status 1. Allow it, restart the terminal app, and run `touchguard` again. Keep the terminal open while you want TouchGuard running. For something that keeps running and starts at login, use the menu bar app.
+For the CLI, the Accessibility permission belongs to the app you run it from (Terminal, iTerm, …). If that app isn't allowed, `touchguard` names it, opens the system prompt and exits with status 1. Allow it, restart the terminal app, and run `touchguard` again. Keep the terminal open while you want TouchGuard running. Don't run the CLI and the menu bar app at the same time.
 
-## Project layout
+## Building from source
 
-```
-TouchGuard.xcodeproj    app target "TouchGuard" and CLI target "TouchGuardCLI"
-TouchGuardCore/         Swift package shared by both targets
-  ClickFilter           the pure pass/block decision logic
-  EventTapController    CGEventTap lifecycle, re-enabling and watchdog
-  Accessibility         permission check, prompt and Settings link
-TouchGuardApp/          SwiftUI menu bar app
-TouchGuardCLI/          command-line tool
-```
-
-To run the core tests:
+Requires Xcode 16 or later (the project is set up for Xcode 27).
 
 ```sh
-cd TouchGuardCore && swift test
+git clone https://github.com/sjhorn/TouchGuard.git && cd TouchGuard
+xcodebuild -scheme TouchGuard -configuration Release -derivedDataPath build/DD build
+open build/DD/Build/Products/Release/TouchGuard.app
 ```
+
+The project signs with the maintainer's team (`DEVELOPMENT_TEAM`). To build under your own account, change the team in Xcode or pass `DEVELOPMENT_TEAM=<yours>`. macOS ties the permission grant to the code signature, so expect to grant it again after switching identities.
+
+Tests:
+
+```sh
+cd TouchGuardCore && swift test                      # core logic and tap state machine
+xcodebuild -scheme TouchGuard test                    # also the app model tests
+```
+
+### Project layout
+
+```
+TouchGuard.xcodeproj    targets: TouchGuard (Developer ID), TouchGuardCLI, TouchGuardTests
+TouchGuardCore/         Swift package shared by the app and CLI
+  ClickFilter           the pure pass/block decision logic
+  EventTapController    tap lifecycle, re-enabling and watchdog
+  TapBackend            the real CGEventTap behind a protocol (faked in tests)
+  Permissions           permission mode, check, prompt and Settings link
+TouchGuardApp/          SwiftUI menu bar app
+TouchGuardCLI/          command-line tool
+TouchGuardTests/        app model tests
+Config/                 Info.plist fragments
+scripts/                release, version bump
+docs/                   GitHub Pages site, appcast, App Store listing
+```
+
+## Releasing
+
+Releases are made by [`scripts/release.sh`](scripts/release.sh), either locally or by GitHub Actions when a `v*` tag is pushed. See [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Support
 
-Open an issue on the original project [here](https://github.com/thesyntaxinator/TouchGuard/issues).
+Questions, bugs and ideas: [open an issue](https://github.com/sjhorn/TouchGuard/issues). Common questions are answered on the [support page](https://sjhorn.github.io/TouchGuard/support). Security reports: see [SECURITY.md](SECURITY.md).
+
+## Licence
+
+MIT. See [LICENSE](LICENSE) and [NOTICE](NOTICE).

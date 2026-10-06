@@ -1,0 +1,7 @@
+title: TouchGuard
+description: Stop accidental trackpad clicks while you type.
+theme: jekyll-theme-primer
+exclude:
+  - app-store
+  - notes
+  - RELEASING.md

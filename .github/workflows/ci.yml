@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash  # -eo pipefail, so xcodebuild failures aren't hidden by xcbeautify
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Core tests
+        working-directory: TouchGuardCore
+        run: swift test
+
+      - name: App tests
+        run: |
+          xcodebuild test -project TouchGuard.xcodeproj -scheme TouchGuard \
+            -derivedDataPath build/ci CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
+
+      - name: Build all schemes
+        run: |
+          for scheme in $(xcodebuild -list -json -project TouchGuard.xcodeproj | python3 -c 'import json,sys; print(" ".join(json.load(sys.stdin)["project"]["schemes"]))'); do
+            echo "::group::$scheme"
+            xcodebuild build -project TouchGuard.xcodeproj -scheme "$scheme" -configuration Release \
+              -derivedDataPath build/ci CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
+            echo "::endgroup::"
+          done

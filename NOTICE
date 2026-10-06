@@ -1,0 +1,11 @@
+TouchGuard 2.x
+Copyright (c) 2026 Scott Horn. Licensed under the MIT License (see LICENSE).
+
+TouchGuard was created by SyntaxSoft in 2016
+(https://github.com/thesyntaxinator/TouchGuard). That project had no licence
+file. TouchGuard 2.x is a new Swift implementation of the same idea and keeps
+the command-line options of the original tool. It contains none of the
+original C source. The original code is preserved, unchanged, in this
+repository's history under the tag `legacy-final` and the branch `legacy`.
+
+Thank you to SyntaxSoft for the original TouchGuard.

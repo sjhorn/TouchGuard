@@ -35,12 +35,14 @@ final class AppModelTests {
         UserDefaults().removePersistentDomain(forName: suiteName)
     }
 
+    var secureInput = false
+
     func makeModel() -> AppModel {
-        AppModel(defaults: defaults) { delay in
+        AppModel(defaults: defaults, makeController: { delay in
             let fake = FakeController(delay: delay)
             self.controller = fake
             return fake
-        }
+        }, isSecureInputEnabled: { [unowned self] in self.secureInput })
     }
 
     @Test func registersDefaults() {
@@ -138,5 +140,25 @@ final class AppModelTests {
         }
         #expect(model.statusText(for: .needsPermission) == expected)
         #expect(model.menuBarSymbol(for: .needsPermission) == "exclamationmark.triangle")
+    }
+
+    @Test func secureInputShowsInStatusOnlyWhileRunning() {
+        let model = makeModel()
+        model.stateChanged(to: .running)
+        secureInput = true
+        model.checkSecureInput()
+        #expect(model.secureInputActive)
+        #expect(model.statusText == "Not blocking: secure input is on")
+        #expect(model.menuBarSymbol == "lock")
+
+        model.stateChanged(to: .paused)
+        #expect(model.statusText == "Paused")
+
+        model.stateChanged(to: .running)
+        secureInput = false
+        model.checkSecureInput()
+        #expect(!model.secureInputActive)
+        #expect(model.statusText == "Active, 200 ms")
+        #expect(model.menuBarSymbol == "hand.raised")
     }
 }

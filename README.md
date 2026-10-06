@@ -32,6 +32,7 @@ TouchGuard runs only in the menu bar and has no Dock icon. The icon shows its st
 | ✋ `hand.raised` | Active: clicks are held back after typing |
 | `hand.raised.slash` | Paused |
 | ⚠️ `exclamationmark.triangle` | Needs permission, or the event tap couldn't start |
+| 🔒 `lock` | Another app has secure input on, so typing can't be seen (see below) |
 
 The menu has:
 
@@ -57,6 +58,10 @@ TouchGuard has to notice key releases and briefly hold back clicks, and macOS on
 On first launch a window explains this and opens the right Settings page. Once you turn TouchGuard on, the window closes by itself and blocking starts. If the permission is removed later, the window comes back. No administrator rights are needed.
 
 If TouchGuard is listed as allowed but the window stays open, remove it from the list with **−** and add it again. This usually happens after replacing the app with a build signed differently.
+
+### Secure input
+
+While another app has macOS **Secure Event Input** on, macOS hides typing from TouchGuard, so it can't block anything. Password fields, password managers and terminals' Secure Keyboard Entry all turn it on. TouchGuard then shows a 🔒 icon and "Not blocking: secure input is on". Close the app's password field or turn off Secure Keyboard Entry. If it stays stuck after the app quits, log out and back in. See the [FAQ](https://sjhorn.github.io/TouchGuard/support/#secure-input).
 
 ### Reliability
 

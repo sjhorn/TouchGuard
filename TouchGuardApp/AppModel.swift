@@ -38,6 +38,8 @@ final class AppModel {
     private(set) var blockedClicks = 0
     private(set) var launchAtLogin = false
     private(set) var launchAtLoginError: String?
+    /// Another app has Secure Event Input on, so key releases can't be seen.
+    private(set) var secureInputActive = false
 
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let controller: TapControlling
@@ -45,11 +47,17 @@ final class AppModel {
     @ObservationIgnored private var hotKey: HotKey?
     @ObservationIgnored private var permissionWindow: NSWindow?
     @ObservationIgnored private var delayWindow: NSWindow?
+    @ObservationIgnored private let isSecureInputEnabled: () -> Bool
+    @ObservationIgnored private var secureInputTimer: Timer?
+
+    static let secureInputCheckInterval: TimeInterval = 2
 
     /// `makeController` gets the starting delay in seconds.
     init(defaults: UserDefaults = .standard,
-         makeController: (TimeInterval) -> TapControlling = { EventTapController(delay: $0) }) {
+         makeController: (TimeInterval) -> TapControlling = { EventTapController(delay: $0) },
+         isSecureInputEnabled: @escaping () -> Bool = { SecureInput.isEnabled }) {
         self.defaults = defaults
+        self.isSecureInputEnabled = isSecureInputEnabled
         defaults.register(defaults: [
             Key.delayMs: Self.defaultDelayMs,
             Key.enabled: true,
@@ -71,12 +79,36 @@ final class AppModel {
         updateHotKey()
         if isEnabled { controller.start() }
         if !Permissions.isGranted { showPermissionWindow() }
+        startSecureInputChecks()
+    }
+
+    // MARK: - Secure input
+
+    private func startSecureInputChecks() {
+        checkSecureInput()
+        let timer = Timer(timeInterval: Self.secureInputCheckInterval, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.checkSecureInput() }
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        secureInputTimer = timer
+    }
+
+    func checkSecureInput() {
+        let active = isSecureInputEnabled()
+        if active != secureInputActive { secureInputActive = active }
     }
 
     // MARK: - Status
 
-    var statusText: String { statusText(for: state) }
-    var menuBarSymbol: String { menuBarSymbol(for: state) }
+    var statusText: String {
+        if state == .running && secureInputActive { return "Not blocking: secure input is on" }
+        return statusText(for: state)
+    }
+
+    var menuBarSymbol: String {
+        if state == .running && secureInputActive { return "lock" }
+        return menuBarSymbol(for: state)
+    }
 
     func statusText(for state: EventTapController.State) -> String {
         switch state {
@@ -241,6 +273,7 @@ final class AppModel {
 }
 
 enum Links {
+    static let secureInputHelp = URL(string: "https://sjhorn.github.io/TouchGuard/support/#secure-input")!
     static let repository = URL(string: "https://github.com/sjhorn/TouchGuard")!
     static let support = URL(string: "https://sjhorn.github.io/TouchGuard/support")!
     static let privacy = URL(string: "https://sjhorn.github.io/TouchGuard/privacy")!

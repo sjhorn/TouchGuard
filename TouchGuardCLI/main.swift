@@ -157,6 +157,13 @@ MainActor.assumeIsolated {
     }
 
     controller.start()
+    if SecureInput.isEnabled {
+        FileHandle.standardError.write(Data("""
+        Warning: secure input is on (a password field, a terminal's Secure Keyboard Entry or a password manager).
+        macOS hides typing from touchguard until it's off, so no clicks will be blocked. Logging out clears a stuck one.
+
+        """.utf8))
+    }
     if controller.state == .failed {
         FileHandle.standardError.write(Data("Could not create the event tap.\n".utf8))
         exit(1)

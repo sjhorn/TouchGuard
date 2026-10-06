@@ -18,6 +18,16 @@ To hold back a click, TouchGuard has to see that you just released a key and the
 ### I turned the permission on, but the window won't go away.
 Select TouchGuard in the list, remove it with **−**, then add it again with **+** (or reopen TouchGuard). This happens when macOS remembers an older copy of the app.
 
+### TouchGuard says "Not blocking: secure input is on". {#secure-input}
+Some apps turn on macOS **Secure Event Input** to protect what you type. Password fields, password managers, and terminals with **Secure Keyboard Entry** switched on all do this. While it's on, macOS hides typing from every app, TouchGuard included, so TouchGuard can't tell when you've just typed and lets every click through. TouchGuard never turns it on itself.
+
+- Close the password field or window you were using, or switch to another app.
+- In your terminal (Terminal, iTerm, Ghostty, …), turn off **Secure Keyboard Entry** in its app menu.
+- Lock or quit your password manager.
+- Sometimes it stays stuck on after the app that turned it on has quit. **Logging out and back in** always clears it.
+
+TouchGuard goes back to "Active" by itself within a couple of seconds once secure input is off.
+
 ### The cursor still jumps while I type.
 Choose a longer delay: menu → **Delay** → 300 or 500 ms, or **Custom…**.
 

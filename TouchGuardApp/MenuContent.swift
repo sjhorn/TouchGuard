@@ -6,6 +6,11 @@ struct MenuContent: View {
     var body: some View {
         Text(model.statusText)
 
+        if model.state == .running && model.secureInputActive {
+            Text("Another app has turned on secure input, which hides typing from TouchGuard.")
+            Button("Learn More…") { NSWorkspace.shared.open(Links.secureInputHelp) }
+        }
+
         if model.state == .needsPermission {
             Button("Grant Permission…") { model.showPermissionWindow() }
         }

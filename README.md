@@ -69,7 +69,7 @@ If TouchGuard is listed as allowed but the window stays open, remove it from the
 
 ### Secure input
 
-While another app has macOS **Secure Event Input** on, macOS hides typing from TouchGuard, so it can't block anything. Password fields, password managers and terminals' Secure Keyboard Entry all turn it on. TouchGuard then shows a 🔒 icon and "Not blocking: secure input is on". Close the app's password field or turn off Secure Keyboard Entry. If it stays stuck after the app quits, log out and back in. See the [FAQ](https://sjhorn.github.io/TouchGuard/support/#secure-input).
+While another app has macOS **Secure Event Input** on, macOS hides typing from TouchGuard, so it can't block anything. Password fields, password managers and terminals' Secure Keyboard Entry all turn it on. TouchGuard then shows a 🔒 icon and "Not blocking: secure input is on". Close the app's password field or turn off Secure Keyboard Entry. If it stays stuck after the app quits, log out and back in. See the [FAQ](https://blog.hornmicro.com/TouchGuard/support/#secure-input).
 
 ### Reliability
 
@@ -77,7 +77,7 @@ macOS sometimes switches event taps off, for example when a callback is slow or 
 
 ## Privacy
 
-TouchGuard collects no data. It has no analytics and no accounts, and it sends nothing anywhere. The only network request is the download version's update check, which fetches the [appcast](https://sjhorn.github.io/TouchGuard/appcast.xml) from GitHub Pages. See the [privacy policy](https://sjhorn.github.io/TouchGuard/privacy).
+TouchGuard collects no data. It has no analytics and no accounts, and it sends nothing anywhere. The only network request is the download version's update check, which fetches the [appcast](https://blog.hornmicro.com/TouchGuard/appcast.xml) from GitHub Pages. See the [privacy policy](https://blog.hornmicro.com/TouchGuard/privacy).
 
 ## Command-line tool
 
@@ -147,7 +147,7 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tes
 
 ## Support
 
-Questions, bugs and ideas: [open an issue](https://github.com/sjhorn/TouchGuard/issues/new/choose). Common questions are answered on the [support page](https://sjhorn.github.io/TouchGuard/support/). Security reports: see [SECURITY.md](SECURITY.md). More in [SUPPORT.md](SUPPORT.md).
+Questions, bugs and ideas: [open an issue](https://github.com/sjhorn/TouchGuard/issues/new/choose). Common questions are answered on the [support page](https://blog.hornmicro.com/TouchGuard/support/). Security reports: see [SECURITY.md](SECURITY.md). More in [SUPPORT.md](SUPPORT.md).
 
 ## Licence
 

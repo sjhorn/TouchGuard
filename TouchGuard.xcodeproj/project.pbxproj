@@ -445,7 +445,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SPARKLE_FEED_URL = "https://sjhorn.github.io/TouchGuard/appcast.xml";
+				SPARKLE_FEED_URL = "https://blog.hornmicro.com/TouchGuard/appcast.xml";
 				SPARKLE_PUBLIC_ED_KEY = "dEo3FHOuU+aIbdmvEMzZccqHNH0F9zd5rbK8o02ohY0=";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -471,7 +471,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SPARKLE_FEED_URL = "https://sjhorn.github.io/TouchGuard/appcast.xml";
+				SPARKLE_FEED_URL = "https://blog.hornmicro.com/TouchGuard/appcast.xml";
 				SPARKLE_PUBLIC_ED_KEY = "dEo3FHOuU+aIbdmvEMzZccqHNH0F9zd5rbK8o02ohY0=";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};

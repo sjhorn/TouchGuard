@@ -145,7 +145,7 @@ release_appstore() {
         -project "$project" -scheme TouchGuardMAS -configuration Release \
         -archivePath "$archive" -derivedDataPath "$derived" \
         MARKETING_VERSION="$version" CURRENT_PROJECT_VERSION="$build_number" \
-        -allowProvisioningUpdates "${asc_auth_xcodebuild[@]}" | xcbeautify_or_cat
+        -allowProvisioningUpdates ${asc_auth_xcodebuild[@]+"${asc_auth_xcodebuild[@]}"} | xcbeautify_or_cat
 
     [[ $(sandbox_entitlement "$archive/Products/Applications/TouchGuard.app") == true ]] \
         || { echo "error: the App Store build isn't sandboxed" >&2; exit 1; }
@@ -153,7 +153,7 @@ release_appstore() {
     step "Uploading to App Store Connect"
     xcodebuild -exportArchive -archivePath "$archive" -exportPath "$out/appstore/export" \
         -exportOptionsPlist scripts/ExportOptions-AppStore.plist \
-        -allowProvisioningUpdates "${asc_auth_xcodebuild[@]}" | xcbeautify_or_cat
+        -allowProvisioningUpdates ${asc_auth_xcodebuild[@]+"${asc_auth_xcodebuild[@]}"} | xcbeautify_or_cat
 
     step "Done: build $build_number is processing in App Store Connect"
 }

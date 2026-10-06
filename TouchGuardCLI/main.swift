@@ -9,7 +9,13 @@ import AppKit
 import Foundation
 import TouchGuardCore
 
-let version = "2.0"
+/// From the Info.plist embedded in the binary (CREATE_INFOPLIST_SECTION_IN_BINARY).
+let version: String = {
+    let info = Bundle.main.infoDictionary
+    let short = info?["CFBundleShortVersionString"] as? String ?? "dev"
+    let build = info?["CFBundleVersion"] as? String
+    return build.map { "\(short) (\($0))" } ?? short
+}()
 
 struct Options {
     var delay: TimeInterval = 0.2
@@ -94,7 +100,7 @@ func log(_ message: String) {
 setvbuf(stdout, nil, _IOLBF, 0)
 let options = parseOptions(Array(CommandLine.arguments.dropFirst()))
 
-guard Accessibility.isTrusted else {
+guard Permissions.isGranted else {
     let app = responsibleAppName()
     FileHandle.standardError.write(Data("""
     touchguard needs Accessibility permission to see key releases and hold back trackpad clicks.
@@ -104,7 +110,7 @@ guard Accessibility.isTrusted else {
     then quit and reopen \(app) and run touchguard again.
 
     """.utf8))
-    Accessibility.requestPrompt()
+    Permissions.request()
     exit(1)
 }
 
@@ -151,6 +157,13 @@ MainActor.assumeIsolated {
     }
 
     controller.start()
+    if SecureInput.isEnabled {
+        FileHandle.standardError.write(Data("""
+        Warning: secure input is on (a password field, a terminal's Secure Keyboard Entry or a password manager).
+        macOS hides typing from touchguard until it's off, so no clicks will be blocked. Logging out clears a stuck one.
+
+        """.utf8))
+    }
     if controller.state == .failed {
         FileHandle.standardError.write(Data("Could not create the event tap.\n".utf8))
         exit(1)

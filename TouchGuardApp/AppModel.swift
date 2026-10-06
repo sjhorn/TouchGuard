@@ -4,6 +4,20 @@ import ServiceManagement
 import SwiftUI
 import TouchGuardCore
 
+/// What `AppModel` needs from the event tap; a seam for tests.
+@MainActor
+protocol TapControlling: AnyObject {
+    var delay: TimeInterval { get set }
+    var onStateChange: ((EventTapController.State) -> Void)? { get set }
+    var onBlock: ((Int) -> Void)? { get set }
+    func start()
+    func stop()
+    func resetCount()
+    func checkHealth()
+}
+
+extension EventTapController: TapControlling {}
+
 @Observable
 @MainActor
 final class AppModel {
@@ -11,7 +25,7 @@ final class AppModel {
     static let delayRange = 50...1000
     static let defaultDelayMs = 200
 
-    private enum Key {
+    enum Key {
         static let delayMs = "delayMs"
         static let enabled = "enabled"
         static let hotKeyEnabled = "hotKeyEnabled"
@@ -24,15 +38,26 @@ final class AppModel {
     private(set) var blockedClicks = 0
     private(set) var launchAtLogin = false
     private(set) var launchAtLoginError: String?
+    /// Another app has Secure Event Input on, so key releases can't be seen.
+    private(set) var secureInputActive = false
 
     @ObservationIgnored private let defaults: UserDefaults
-    @ObservationIgnored private let controller: EventTapController
+    @ObservationIgnored private let controller: TapControlling
+    @ObservationIgnored let updater = Updater()
     @ObservationIgnored private var hotKey: HotKey?
     @ObservationIgnored private var permissionWindow: NSWindow?
     @ObservationIgnored private var delayWindow: NSWindow?
+    @ObservationIgnored private let isSecureInputEnabled: () -> Bool
+    @ObservationIgnored private var secureInputTimer: Timer?
 
-    init(defaults: UserDefaults = .standard) {
+    static let secureInputCheckInterval: TimeInterval = 2
+
+    /// `makeController` gets the starting delay in seconds.
+    init(defaults: UserDefaults = .standard,
+         makeController: (TimeInterval) -> TapControlling = { EventTapController(delay: $0) },
+         isSecureInputEnabled: @escaping () -> Bool = { SecureInput.isEnabled }) {
         self.defaults = defaults
+        self.isSecureInputEnabled = isSecureInputEnabled
         defaults.register(defaults: [
             Key.delayMs: Self.defaultDelayMs,
             Key.enabled: true,
@@ -42,7 +67,7 @@ final class AppModel {
         self.delayMs = delayMs
         isEnabled = defaults.bool(forKey: Key.enabled)
         hotKeyEnabled = defaults.bool(forKey: Key.hotKeyEnabled)
-        controller = EventTapController(delay: TimeInterval(delayMs) / 1000)
+        controller = makeController(TimeInterval(delayMs) / 1000)
 
         controller.onStateChange = { [weak self] state in self?.stateChanged(to: state) }
         controller.onBlock = { [weak self] total in self?.blockedClicks = total }
@@ -53,21 +78,52 @@ final class AppModel {
         refreshLaunchAtLogin()
         updateHotKey()
         if isEnabled { controller.start() }
-        if !Accessibility.isTrusted { showPermissionWindow() }
+        if !Permissions.isGranted { showPermissionWindow() }
+        startSecureInputChecks()
+    }
+
+    // MARK: - Secure input
+
+    private func startSecureInputChecks() {
+        checkSecureInput()
+        let timer = Timer(timeInterval: Self.secureInputCheckInterval, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.checkSecureInput() }
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        secureInputTimer = timer
+    }
+
+    func checkSecureInput() {
+        let active = isSecureInputEnabled()
+        if active != secureInputActive { secureInputActive = active }
     }
 
     // MARK: - Status
 
     var statusText: String {
+        if state == .running && secureInputActive { return "Not blocking: secure input is on" }
+        return statusText(for: state)
+    }
+
+    var menuBarSymbol: String {
+        if state == .running && secureInputActive { return "lock" }
+        return menuBarSymbol(for: state)
+    }
+
+    func statusText(for state: EventTapController.State) -> String {
         switch state {
         case .running: "Active, \(delayMs) ms"
         case .paused: "Paused"
-        case .needsPermission: "Needs Accessibility permission"
+        case .needsPermission:
+            switch Permissions.mode {
+            case .accessibility: "Needs Accessibility permission"
+            case .inputMonitoringAndPostEvent: "Needs Input Monitoring permission"
+            }
         case .failed: "Couldn't start the event tap"
         }
     }
 
-    var menuBarSymbol: String {
+    func menuBarSymbol(for state: EventTapController.State) -> String {
         switch state {
         case .running: "hand.raised"
         case .paused: "hand.raised.slash"
@@ -75,7 +131,7 @@ final class AppModel {
         }
     }
 
-    private func stateChanged(to newState: EventTapController.State) {
+    func stateChanged(to newState: EventTapController.State) {
         state = newState
         switch newState {
         case .needsPermission: showPermissionWindow()
@@ -177,15 +233,19 @@ final class AppModel {
     }
 
     func showAbout() {
+        let font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
         let credits = NSMutableAttributedString(
-            string: "Holds back trackpad clicks for a moment after each key release, so a palm on the trackpad doesn't move the cursor while you type.\n\nBased on the original TouchGuard by SyntaxSoft (2016).\n",
-            attributes: [.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
-                         .foregroundColor: NSColor.labelColor])
-        let link = "github.com/thesyntaxinator/TouchGuard"
-        credits.append(NSAttributedString(
-            string: link,
-            attributes: [.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
-                         .link: URL(string: "https://\(link)")!]))
+            string: "Holds back trackpad clicks for a moment after each key release, so a palm on the trackpad doesn't move the cursor while you type.\n\nBased on the original TouchGuard by SyntaxSoft (2016).\n\n",
+            attributes: [.font: font, .foregroundColor: NSColor.labelColor])
+        let links: [(String, URL)] = [
+            ("GitHub", Links.repository),
+            ("Support", Links.support),
+            ("Privacy Policy", Links.privacy),
+        ]
+        for (index, (title, url)) in links.enumerated() {
+            if index > 0 { credits.append(NSAttributedString(string: "  ·  ", attributes: [.font: font])) }
+            credits.append(NSAttributedString(string: title, attributes: [.font: font, .link: url]))
+        }
         let centered = NSMutableParagraphStyle()
         centered.alignment = .center
         credits.addAttribute(.paragraphStyle, value: centered,
@@ -210,4 +270,11 @@ final class AppModel {
         window.makeKeyAndOrderFront(nil)
         return window
     }
+}
+
+enum Links {
+    static let secureInputHelp = URL(string: "https://sjhorn.github.io/TouchGuard/support/#secure-input")!
+    static let repository = URL(string: "https://github.com/sjhorn/TouchGuard")!
+    static let support = URL(string: "https://sjhorn.github.io/TouchGuard/support")!
+    static let privacy = URL(string: "https://sjhorn.github.io/TouchGuard/privacy")!
 }

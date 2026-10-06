@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A0000000000000000000030"
+               BlueprintIdentifier = "7A0000000000000000000033"
                BuildableName = "TouchGuard.app"
-               BlueprintName = "TouchGuard"
+               BlueprintName = "TouchGuardMAS"
                ReferencedContainer = "container:TouchGuard.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A0000000000000000000032"
-               BuildableName = "TouchGuardTests.xctest"
-               BlueprintName = "TouchGuardTests"
-               ReferencedContainer = "container:TouchGuard.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "TouchGuardCoreTests"
-               BuildableName = "TouchGuardCoreTests"
-               BlueprintName = "TouchGuardCoreTests"
-               ReferencedContainer = "container:TouchGuardCore">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -64,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A0000000000000000000030"
+            BlueprintIdentifier = "7A0000000000000000000033"
             BuildableName = "TouchGuard.app"
-            BlueprintName = "TouchGuard"
+            BlueprintName = "TouchGuardMAS"
             ReferencedContainer = "container:TouchGuard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A0000000000000000000030"
+            BlueprintIdentifier = "7A0000000000000000000033"
             BuildableName = "TouchGuard.app"
-            BlueprintName = "TouchGuard"
+            BlueprintName = "TouchGuardMAS"
             ReferencedContainer = "container:TouchGuard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

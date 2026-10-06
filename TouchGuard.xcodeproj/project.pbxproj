@@ -7,14 +7,50 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A0000000000000000000072 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 7A0000000000000000000071 /* Sparkle */; };
+		7A0000000000000000000073 /* touchguard in Embed Command Line Tool */ = {isa = PBXBuildFile; fileRef = 7A0000000000000000000011 /* touchguard */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		7A0000000000000000000050 /* TouchGuardCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7A0000000000000000000052 /* TouchGuardCore */; };
 		7A0000000000000000000051 /* TouchGuardCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7A0000000000000000000053 /* TouchGuardCore */; };
+		7A0000000000000000000058 /* TouchGuardCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7A0000000000000000000057 /* TouchGuardCore */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7A0000000000000000000075 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A0000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A0000000000000000000031;
+			remoteInfo = TouchGuardCLI;
+		};
+		7A0000000000000000000077 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A0000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A0000000000000000000030;
+			remoteInfo = TouchGuard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7A0000000000000000000045 /* Embed Command Line Tool */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Helpers;
+			dstSubfolderSpec = 1;
+			files = (
+				7A0000000000000000000073 /* touchguard in Embed Command Line Tool */,
+			);
+			name = "Embed Command Line Tool";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7A0000000000000000000010 /* TouchGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A0000000000000000000011 /* touchguard */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = touchguard; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A0000000000000000000012 /* TouchGuardCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TouchGuardCore; sourceTree = "<group>"; };
+		7A0000000000000000000014 /* TouchGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A0000000000000000000013 /* TouchGuardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TouchGuardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -22,8 +58,18 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				TouchGuardApp.entitlements,
+				TouchGuardMAS.entitlements,
 			);
 			target = 7A0000000000000000000030 /* TouchGuard */;
+		};
+		7A0000000000000000000024 /* Exceptions for "TouchGuardApp" folder in "TouchGuardMAS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Licenses/Sparkle-LICENSE.txt,
+				TouchGuardApp.entitlements,
+				TouchGuardMAS.entitlements,
+			);
+			target = 7A0000000000000000000033 /* TouchGuardMAS */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -32,6 +78,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				7A0000000000000000000022 /* Exceptions for "TouchGuardApp" folder in "TouchGuard" target */,
+				7A0000000000000000000024 /* Exceptions for "TouchGuardApp" folder in "TouchGuardMAS" target */,
 			);
 			path = TouchGuardApp;
 			sourceTree = "<group>";
@@ -39,6 +86,11 @@
 		7A0000000000000000000021 /* TouchGuardCLI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TouchGuardCLI;
+			sourceTree = "<group>";
+		};
+		7A0000000000000000000023 /* TouchGuardTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TouchGuardTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -49,6 +101,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A0000000000000000000050 /* TouchGuardCore in Frameworks */,
+				7A0000000000000000000072 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +110,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A0000000000000000000051 /* TouchGuardCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A000000000000000000004A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A0000000000000000000058 /* TouchGuardCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A0000000000000000000047 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +137,7 @@
 				7A0000000000000000000012 /* TouchGuardCore */,
 				7A0000000000000000000020 /* TouchGuardApp */,
 				7A0000000000000000000021 /* TouchGuardCLI */,
+				7A0000000000000000000023 /* TouchGuardTests */,
 				7A0000000000000000000003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +147,8 @@
 			children = (
 				7A0000000000000000000010 /* TouchGuard.app */,
 				7A0000000000000000000011 /* touchguard */,
+				7A0000000000000000000013 /* TouchGuardTests.xctest */,
+				7A0000000000000000000014 /* TouchGuard.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -92,10 +163,12 @@
 				7A0000000000000000000040 /* Sources */,
 				7A0000000000000000000041 /* Frameworks */,
 				7A0000000000000000000042 /* Resources */,
+				7A0000000000000000000045 /* Embed Command Line Tool */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7A0000000000000000000074 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				7A0000000000000000000020 /* TouchGuardApp */,
@@ -103,6 +176,7 @@
 			name = TouchGuard;
 			packageProductDependencies = (
 				7A0000000000000000000052 /* TouchGuardCore */,
+				7A0000000000000000000071 /* Sparkle */,
 			);
 			productName = TouchGuard;
 			productReference = 7A0000000000000000000010 /* TouchGuard.app */;
@@ -130,6 +204,50 @@
 			productReference = 7A0000000000000000000011 /* touchguard */;
 			productType = "com.apple.product-type.tool";
 		};
+		7A0000000000000000000033 /* TouchGuardMAS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A000000000000000000006C /* Build configuration list for PBXNativeTarget "TouchGuardMAS" */;
+			buildPhases = (
+				7A0000000000000000000049 /* Sources */,
+				7A000000000000000000004A /* Frameworks */,
+				7A000000000000000000004B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7A0000000000000000000020 /* TouchGuardApp */,
+			);
+			name = TouchGuardMAS;
+			packageProductDependencies = (
+				7A0000000000000000000057 /* TouchGuardCore */,
+			);
+			productName = TouchGuard;
+			productReference = 7A0000000000000000000014 /* TouchGuard.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7A0000000000000000000032 /* TouchGuardTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A0000000000000000000069 /* Build configuration list for PBXNativeTarget "TouchGuardTests" */;
+			buildPhases = (
+				7A0000000000000000000046 /* Sources */,
+				7A0000000000000000000047 /* Frameworks */,
+				7A0000000000000000000048 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A0000000000000000000076 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7A0000000000000000000023 /* TouchGuardTests */,
+			);
+			name = TouchGuardTests;
+			productName = TouchGuardTests;
+			productReference = 7A0000000000000000000013 /* TouchGuardTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -146,6 +264,13 @@
 					7A0000000000000000000031 = {
 						CreatedOnToolsVersion = 27.0;
 					};
+					7A0000000000000000000033 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					7A0000000000000000000032 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 7A0000000000000000000030;
+					};
 				};
 			};
 			buildConfigurationList = 7A0000000000000000000060 /* Build configuration list for PBXProject "TouchGuard" */;
@@ -159,6 +284,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				7A0000000000000000000054 /* XCLocalSwiftPackageReference "TouchGuardCore" */,
+				7A0000000000000000000070 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7A0000000000000000000003 /* Products */;
@@ -167,12 +293,28 @@
 			targets = (
 				7A0000000000000000000030 /* TouchGuard */,
 				7A0000000000000000000031 /* TouchGuardCLI */,
+				7A0000000000000000000032 /* TouchGuardTests */,
+				7A0000000000000000000033 /* TouchGuardMAS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7A0000000000000000000042 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A000000000000000000004B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A0000000000000000000048 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -196,7 +338,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7A0000000000000000000049 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A0000000000000000000046 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7A0000000000000000000074 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A0000000000000000000031 /* TouchGuardCLI */;
+			targetProxy = 7A0000000000000000000075 /* PBXContainerItemProxy */;
+		};
+		7A0000000000000000000076 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A0000000000000000000030 /* TouchGuard */;
+			targetProxy = 7A0000000000000000000077 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		7A0000000000000000000061 /* Debug */ = {
@@ -218,7 +387,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.0;
 				CURRENT_PROJECT_VERSION = 1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -247,7 +416,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.0;
 				CURRENT_PROJECT_VERSION = 1;
 				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -268,13 +437,16 @@
 				INFOPLIST_KEY_CFBundleDisplayName = TouchGuard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Based on TouchGuard © 2016 SyntaxSoft.";
+				INFOPLIST_FILE = "Config/TouchGuard-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Scott Horn. Based on TouchGuard by SyntaxSoft (2016).";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPARKLE_FEED_URL = "https://sjhorn.github.io/TouchGuard/appcast.xml";
+				SPARKLE_PUBLIC_ED_KEY = "dEo3FHOuU+aIbdmvEMzZccqHNH0F9zd5rbK8o02ohY0=";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Debug;
@@ -291,13 +463,16 @@
 				INFOPLIST_KEY_CFBundleDisplayName = TouchGuard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Based on TouchGuard © 2016 SyntaxSoft.";
+				INFOPLIST_FILE = "Config/TouchGuard-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Scott Horn. Based on TouchGuard by SyntaxSoft (2016).";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPARKLE_FEED_URL = "https://sjhorn.github.io/TouchGuard/appcast.xml";
+				SPARKLE_PUBLIC_ED_KEY = "dEo3FHOuU+aIbdmvEMzZccqHNH0F9zd5rbK8o02ohY0=";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
@@ -305,16 +480,106 @@
 		7A0000000000000000000067 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Scott Horn. Based on TouchGuard by SyntaxSoft (2016).";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.touchguard;
+				PRODUCT_MODULE_NAME = TouchGuardCLI;
 				PRODUCT_NAME = touchguard;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
 		7A0000000000000000000068 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Scott Horn. Based on TouchGuard by SyntaxSoft (2016).";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.touchguard;
+				PRODUCT_MODULE_NAME = TouchGuardCLI;
 				PRODUCT_NAME = touchguard;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7A000000000000000000006D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TouchGuardApp/TouchGuardMAS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/TouchGuardMAS-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = TouchGuard;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Scott Horn. Based on TouchGuard by SyntaxSoft (2016).";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuard;
+				PRODUCT_MODULE_NAME = TouchGuard;
+				PRODUCT_NAME = TouchGuard;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_STORE $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		7A000000000000000000006E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TouchGuardApp/TouchGuardMAS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/TouchGuardMAS-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = TouchGuard;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Scott Horn. Based on TouchGuard by SyntaxSoft (2016).";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuard;
+				PRODUCT_MODULE_NAME = TouchGuard;
+				PRODUCT_NAME = TouchGuard;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_STORE $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		7A000000000000000000006A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TouchGuard.app/Contents/MacOS/TouchGuard";
+			};
+			name = Debug;
+		};
+		7A000000000000000000006B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hornmicro.TouchGuardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TouchGuard.app/Contents/MacOS/TouchGuard";
 			};
 			name = Release;
 		};
@@ -348,6 +613,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		7A0000000000000000000069 /* Build configuration list for PBXNativeTarget "TouchGuardTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A000000000000000000006A /* Debug */,
+				7A000000000000000000006B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A000000000000000000006C /* Build configuration list for PBXNativeTarget "TouchGuardMAS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A000000000000000000006D /* Debug */,
+				7A000000000000000000006E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -357,6 +640,17 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		7A0000000000000000000070 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		7A0000000000000000000052 /* TouchGuardCore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -365,6 +659,15 @@
 		7A0000000000000000000053 /* TouchGuardCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TouchGuardCore;
+		};
+		7A0000000000000000000057 /* TouchGuardCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TouchGuardCore;
+		};
+		7A0000000000000000000071 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A0000000000000000000070 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

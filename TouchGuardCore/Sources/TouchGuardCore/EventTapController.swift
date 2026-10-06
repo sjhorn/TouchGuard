@@ -1,8 +1,12 @@
 import CoreGraphics
 import Foundation
+import os
+
+/// Tap lifecycle and decisions. Never logs key codes or characters, only event types.
+let tapLog = Logger(subsystem: "com.hornmicro.TouchGuard", category: "tap")
 
 /// Owns the CGEventTap: creates it, feeds events through a `ClickFilter`,
-/// re-enables it when macOS switches it off, and tracks Accessibility trust.
+/// re-enables it when macOS switches it off, and tracks the tap's permissions.
 ///
 /// Everything happens on the main thread; the tap's run loop source is added
 /// to the main run loop, so the C callback is delivered there too.
@@ -25,7 +29,11 @@ public final class EventTapController {
     }
 
     public private(set) var state: State = .paused {
-        didSet { if state != oldValue { onStateChange?(state) } }
+        didSet {
+            guard state != oldValue else { return }
+            tapLog.notice("State \(String(describing: oldValue), privacy: .public) → \(String(describing: self.state), privacy: .public)")
+            onStateChange?(state)
+        }
     }
 
     /// Whether the user wants clicks to be guarded.
@@ -49,13 +57,21 @@ public final class EventTapController {
     public let clock: @Sendable () -> TimeInterval
 
     private var filter: ClickFilter
-    private var tap: CFMachPort?
-    private var source: CFRunLoopSource?
+    private let backend: TapBackend
+    private let permissions: PermissionChecking
+    private var hasTap = false
     private var watchdog: Timer?
+    /// When macOS recently disabled the tap, for spotting a rearm loop.
+    private var recentDisables: [TimeInterval] = []
 
     public static let watchdogInterval: TimeInterval = 2
+    /// More than this many disables within `rearmLoopWindow` means re-enabling
+    /// isn't helping (e.g. the permission was just revoked and every event
+    /// times out). The tap is then removed and the watchdog recreates it.
+    static let rearmLoopLimit = 3
+    static let rearmLoopWindow: TimeInterval = 10
 
-    private static let eventMask: CGEventMask = {
+    static let eventMask: CGEventMask = {
         let types: [CGEventType] = [
             .keyUp,
             .leftMouseDown, .leftMouseUp,
@@ -65,10 +81,19 @@ public final class EventTapController {
         return types.reduce(0) { $0 | (1 << CGEventMask($1.rawValue)) }
     }()
 
-    public init(delay: TimeInterval,
-                clock: @escaping @Sendable () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
+    public convenience init(delay: TimeInterval,
+                            clock: @escaping @Sendable () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
+        self.init(delay: delay, clock: clock, backend: CGEventTapBackend(), permissions: SystemPermissions())
+    }
+
+    init(delay: TimeInterval,
+         clock: @escaping @Sendable () -> TimeInterval,
+         backend: TapBackend,
+         permissions: PermissionChecking) {
         self.filter = ClickFilter(delay: delay)
         self.clock = clock
+        self.backend = backend
+        self.permissions = permissions
     }
 
     // MARK: - Public control
@@ -93,68 +118,71 @@ public final class EventTapController {
     // MARK: - Tap lifecycle
 
     private func install() {
-        guard isEnabled, tap == nil else { return }
-        guard Accessibility.isTrusted else {
+        guard isEnabled, !hasTap else { return }
+        guard permissions.isGranted else {
             state = .needsPermission
             return
         }
-        let refcon = Unmanaged.passUnretained(self).toOpaque()
-        guard let port = CGEvent.tapCreate(
-            tap: .cghidEventTap,
-            place: .headInsertEventTap,
-            options: .defaultTap,
-            eventsOfInterest: Self.eventMask,
-            callback: { _, type, event, refcon in
-                guard let refcon else { return Unmanaged.passUnretained(event) }
-                let controller = Unmanaged<EventTapController>.fromOpaque(refcon).takeUnretainedValue()
-                let pass = MainActor.assumeIsolated { controller.handle(type: type, event: event) }
-                return pass ? Unmanaged.passUnretained(event) : nil
-            },
-            userInfo: refcon
-        ) else {
-            state = Accessibility.isTrusted ? .failed : .needsPermission
+        let created = backend.create(mask: Self.eventMask) { [weak self] type in
+            self?.handle(type: type) ?? true
+        }
+        guard created else {
+            tapLog.error("Couldn't create the event tap")
+            state = permissions.isGranted ? .failed : .needsPermission
             return
         }
-        let src = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, port, 0)
-        CFRunLoopAddSource(CFRunLoopGetMain(), src, .commonModes)
-        CGEvent.tapEnable(tap: port, enable: true)
-        tap = port
-        source = src
+        hasTap = true
         state = .running
     }
 
     private func teardown() {
-        if let tap {
-            CGEvent.tapEnable(tap: tap, enable: false)
-            CFMachPortInvalidate(tap)
+        backend.invalidate()
+        hasTap = false
+        recentDisables.removeAll()
+    }
+
+    /// macOS switched the tap off. Turning it back on is right for a slow
+    /// callback or secure input, but not when the permission is gone: then
+    /// every event would wait for the tap to time out, stalling all input.
+    private func tapWasDisabled(_ reason: RearmReason, at now: TimeInterval) {
+        guard permissions.isGranted else {
+            tapLog.notice("Tap disabled (\(String(describing: reason), privacy: .public)) and permission is gone; removing it")
+            teardown()
+            state = .needsPermission
+            return
         }
-        if let source {
-            CFRunLoopRemoveSource(CFRunLoopGetMain(), source, .commonModes)
+        recentDisables = recentDisables.filter { now - $0 < Self.rearmLoopWindow } + [now]
+        guard recentDisables.count <= Self.rearmLoopLimit else {
+            tapLog.error("Tap disabled \(self.recentDisables.count) times in \(Self.rearmLoopWindow)s; backing off until the watchdog")
+            teardown()
+            state = .failed
+            return
         }
-        tap = nil
-        source = nil
+        rearm(reason)
     }
 
     private func rearm(_ reason: RearmReason) {
-        guard let tap else { return }
-        CGEvent.tapEnable(tap: tap, enable: true)
+        guard hasTap else { return }
+        backend.setEnabled(true)
         rearmCount += 1
+        tapLog.notice("Tap re-enabled (\(String(describing: reason), privacy: .public)), total \(self.rearmCount)")
         onRearm?(reason)
     }
 
     // MARK: - Event handling
 
     /// Returns true if the event should pass through.
-    private func handle(type: CGEventType, event: CGEvent) -> Bool {
+    func handle(type: CGEventType) -> Bool {
         let now = clock()
         switch type {
         case .tapDisabledByTimeout:
-            rearm(.timeout)
+            tapWasDisabled(.timeout, at: now)
             return true
         case .tapDisabledByUserInput:
-            rearm(.userInput)
+            tapWasDisabled(.userInput, at: now)
             return true
         case .keyUp:
+            tapLog.debug("Key released")
             filter.keyReleased(at: now)
             onKeyRelease?(filter.blockUntil)
             return true
@@ -162,6 +190,7 @@ public final class EventTapController {
             guard let mouse = Self.mouseEvent(for: type) else { return true }
             let before = filter.blockedClicks
             let decision = filter.decide(mouse, at: now)
+            tapLog.debug("Mouse \(String(describing: mouse), privacy: .public) → \(String(describing: decision), privacy: .public)")
             if filter.blockedClicks != before {
                 onBlock?(filter.blockedClicks)
             }
@@ -200,19 +229,19 @@ public final class EventTapController {
     /// Runs every `watchdogInterval` while enabled.
     public func checkHealth() {
         guard isEnabled else { return }
-        guard Accessibility.isTrusted else {
+        guard permissions.isGranted else {
             teardown()
             state = .needsPermission
             return
         }
-        guard let tap else {
-            // Trust came back, or creation failed earlier: try again.
+        guard hasTap else {
+            // Permission came back, or creation failed or was backed off earlier: try again.
             install()
             return
         }
-        if !CGEvent.tapIsEnabled(tap: tap) {
+        if !backend.isEnabled {
             rearm(.watchdog)
-            if !CGEvent.tapIsEnabled(tap: tap) {
+            if !backend.isEnabled {
                 teardown()
                 install()
             }

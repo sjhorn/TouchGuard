@@ -1,0 +1,22 @@
+TouchGuard 2.x
+Copyright (c) 2026 Scott Horn. Licensed under the MIT License (see LICENSE).
+
+TouchGuard was created by SyntaxSoft in 2016
+(https://github.com/thesyntaxinator/TouchGuard). That project had no licence
+file. TouchGuard 2.x is a new Swift implementation of the same idea and keeps
+the command-line options of the original tool. It contains none of the
+original C source. The original code is preserved, unchanged, in this
+repository's history under the tag `legacy-final` and the branch `legacy`.
+
+Thank you to SyntaxSoft for the original TouchGuard.
+
+Third-party software
+--------------------
+The download (Developer ID) version of TouchGuard includes Sparkle
+(https://sparkle-project.org), Copyright (c) 2006-2013 Andy Matuschak and
+others, under the MIT License, with components under BSD-style and other
+permissive licences. Its full licence text ships inside the app at
+TouchGuard.app/Contents/Resources/Sparkle-LICENSE.txt and is kept in this
+repository at TouchGuardApp/Licenses/Sparkle-LICENSE.txt.
+
+The Mac App Store version contains no third-party code.

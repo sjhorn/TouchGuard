@@ -1,0 +1,105 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld" : {
+
+    },
+    "%lld ms" : {
+
+    },
+    "About TouchGuard" : {
+
+    },
+    "Already on but this window stays open? Remove TouchGuard from the list with −, then add it again." : {
+
+    },
+    "Block clicks for %lld ms after each key release" : {
+
+    },
+    "Blocked clicks: %lld" : {
+
+    },
+    "Changes apply immediately. Try a longer delay if the cursor still jumps, or a shorter one if the trackpad feels slow after typing." : {
+
+    },
+    "Check for Updates…" : {
+
+    },
+    "Click **Open Accessibility Settings**." : {
+
+    },
+    "Click **Open Privacy Settings**." : {
+
+    },
+    "Custom…" : {
+
+    },
+    "Delay: %lld ms" : {
+
+    },
+    "Enabled" : {
+
+    },
+    "Global Shortcut ⌃⌥⌘T" : {
+
+    },
+    "Grant Permission…" : {
+
+    },
+    "Launch at Login" : {
+
+    },
+    "Launch at login failed: %@" : {
+
+    },
+    "Open Accessibility Settings" : {
+
+    },
+    "Open Privacy Settings" : {
+
+    },
+    "Permission granted" : {
+
+    },
+    "Quit TouchGuard" : {
+
+    },
+    "Reset Count" : {
+
+    },
+    "This window closes by itself and blocking starts." : {
+
+    },
+    "To stop accidental trackpad taps while you type, TouchGuard needs to notice when you release a key and briefly hold back clicks. macOS only allows this for apps you've allowed under Accessibility." : {
+
+    },
+    "To stop accidental trackpad taps while you type, TouchGuard needs to notice when you release a key and briefly hold back clicks. macOS only allows this for apps you've allowed under Input Monitoring and Accessibility." : {
+
+    },
+    "TouchGuard needs Accessibility permission" : {
+
+    },
+    "TouchGuard needs Input Monitoring permission" : {
+
+    },
+    "TouchGuard never reads, records or sends what you type. It only checks *that* a key was released." : {
+
+    },
+    "TouchGuard: %@" : {
+
+    },
+    "Turn on **TouchGuard** in the list." : {
+
+    },
+    "Turn on **TouchGuard** under **Accessibility** too." : {
+
+    },
+    "Turn on **TouchGuard** under **Input Monitoring**." : {
+
+    },
+    "Waiting for permission…" : {
+
+    }
+  },
+  "version" : "1.0"
+}

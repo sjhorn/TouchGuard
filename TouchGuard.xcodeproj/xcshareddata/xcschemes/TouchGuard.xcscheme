@@ -32,6 +32,16 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A0000000000000000000032"
+               BuildableName = "TouchGuardTests.xctest"
+               BlueprintName = "TouchGuardTests"
+               ReferencedContainer = "container:TouchGuard.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "TouchGuardCoreTests"
                BuildableName = "TouchGuardCoreTests"
                BlueprintName = "TouchGuardCoreTests"

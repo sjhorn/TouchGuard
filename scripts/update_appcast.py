@@ -67,7 +67,9 @@ def main() -> None:
     args = p.parse_args()
 
     attrs = dict(re.findall(r'(\S+?)="([^"]*)"', args.signature))
-    if "sparkle:edSignature" not in attrs or "length" not in attrs:
+    # Newer sign_update prints sparkle:length, older ones length.
+    length = attrs.get("sparkle:length", attrs.get("length"))
+    if "sparkle:edSignature" not in attrs or length is None:
         sys.exit(f"error: unexpected sign_update output: {args.signature!r}")
 
     tree = ET.parse(args.appcast)
@@ -89,7 +91,7 @@ def main() -> None:
         "url": args.url,
         "type": "application/octet-stream",
         f"{{{SPARKLE}}}edSignature": attrs["sparkle:edSignature"],
-        "length": attrs["length"],
+        "length": length,
     })
 
     # Newest first, after the channel's own elements.

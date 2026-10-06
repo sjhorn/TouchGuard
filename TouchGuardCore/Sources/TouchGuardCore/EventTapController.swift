@@ -53,8 +53,15 @@ public final class EventTapController {
     private let permissions: PermissionChecking
     private var hasTap = false
     private var watchdog: Timer?
+    /// When macOS recently disabled the tap, for spotting a rearm loop.
+    private var recentDisables: [TimeInterval] = []
 
     public static let watchdogInterval: TimeInterval = 2
+    /// More than this many disables within `rearmLoopWindow` means re-enabling
+    /// isn't helping (e.g. the permission was just revoked and every event
+    /// times out). The tap is then removed and the watchdog recreates it.
+    static let rearmLoopLimit = 3
+    static let rearmLoopWindow: TimeInterval = 10
 
     static let eventMask: CGEventMask = {
         let types: [CGEventType] = [
@@ -122,6 +129,25 @@ public final class EventTapController {
     private func teardown() {
         backend.invalidate()
         hasTap = false
+        recentDisables.removeAll()
+    }
+
+    /// macOS switched the tap off. Turning it back on is right for a slow
+    /// callback or secure input, but not when the permission is gone: then
+    /// every event would wait for the tap to time out, stalling all input.
+    private func tapWasDisabled(_ reason: RearmReason, at now: TimeInterval) {
+        guard permissions.isGranted else {
+            teardown()
+            state = .needsPermission
+            return
+        }
+        recentDisables = recentDisables.filter { now - $0 < Self.rearmLoopWindow } + [now]
+        guard recentDisables.count <= Self.rearmLoopLimit else {
+            teardown()
+            state = .failed
+            return
+        }
+        rearm(reason)
     }
 
     private func rearm(_ reason: RearmReason) {
@@ -138,10 +164,10 @@ public final class EventTapController {
         let now = clock()
         switch type {
         case .tapDisabledByTimeout:
-            rearm(.timeout)
+            tapWasDisabled(.timeout, at: now)
             return true
         case .tapDisabledByUserInput:
-            rearm(.userInput)
+            tapWasDisabled(.userInput, at: now)
             return true
         case .keyUp:
             filter.keyReleased(at: now)
@@ -195,7 +221,7 @@ public final class EventTapController {
             return
         }
         guard hasTap else {
-            // Permission came back, or creation failed earlier: try again.
+            // Permission came back, or creation failed or was backed off earlier: try again.
             install()
             return
         }

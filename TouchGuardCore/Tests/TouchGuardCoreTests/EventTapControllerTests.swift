@@ -127,6 +127,68 @@ struct EventTapControllerTests {
         c.stop()
     }
 
+    @Test(arguments: [CGEventType.tapDisabledByTimeout, .tapDisabledByUserInput])
+    func disabledAfterRevokeTearsDownInsteadOfRearming(type: CGEventType) {
+        let c = makeController()
+        var reasons: [EventTapController.RearmReason] = []
+        c.onRearm = { reasons.append($0) }
+        c.start()
+
+        permissions.isGranted = false
+        backend.disableBySystem()
+        #expect(backend.send(type))
+        #expect(reasons.isEmpty)
+        #expect(!backend.hasTap)
+        #expect(!backend.isEnabled)
+        #expect(c.state == .needsPermission)
+
+        permissions.isGranted = true
+        c.checkHealth()
+        #expect(c.state == .running)
+        #expect(backend.createCount == 2)
+        c.stop()
+    }
+
+    @Test func rearmLoopBacksOffUntilWatchdog() {
+        let c = makeController()
+        c.start()
+
+        // Three disables in quick succession are rearmed…
+        for i in 0..<EventTapController.rearmLoopLimit {
+            clock.now = 100 + Double(i)
+            backend.disableBySystem()
+            _ = backend.send(.tapDisabledByTimeout)
+            #expect(backend.isEnabled)
+        }
+        // …the next one within the window removes the tap.
+        clock.now = 104
+        backend.disableBySystem()
+        _ = backend.send(.tapDisabledByTimeout)
+        #expect(c.rearmCount == EventTapController.rearmLoopLimit)
+        #expect(!backend.hasTap)
+        #expect(c.state == .failed)
+
+        // The watchdog brings it back.
+        c.checkHealth()
+        #expect(c.state == .running)
+        #expect(backend.createCount == 2)
+        c.stop()
+    }
+
+    @Test func occasionalDisablesKeepRearming() {
+        let c = makeController()
+        c.start()
+        for i in 0..<10 {
+            clock.now = 100 + Double(i) * EventTapController.rearmLoopWindow / 2
+            backend.disableBySystem()
+            _ = backend.send(.tapDisabledByUserInput)
+        }
+        #expect(c.rearmCount == 10)
+        #expect(backend.createCount == 1)
+        #expect(c.state == .running)
+        c.stop()
+    }
+
     @Test func watchdogRearmsSilentlyDisabledTap() {
         let c = makeController()
         var reasons: [EventTapController.RearmReason] = []

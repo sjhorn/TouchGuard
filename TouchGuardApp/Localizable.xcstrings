@@ -13,6 +13,9 @@
     "Already on but this window stays open? Remove TouchGuard from the list with −, then add it again." : {
 
     },
+    "Another app has turned on secure input, which hides typing from TouchGuard." : {
+
+    },
     "Block clicks for %lld ms after each key release" : {
 
     },
@@ -50,6 +53,9 @@
 
     },
     "Launch at login failed: %@" : {
+
+    },
+    "Learn More…" : {
 
     },
     "Open Accessibility Settings" : {

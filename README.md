@@ -24,7 +24,7 @@ Based on the original [TouchGuard by SyntaxSoft](https://github.com/thesyntaxina
 ## Install
 
 - **Download (recommended):** get `TouchGuard-<version>.dmg` from [Releases](https://github.com/sjhorn/TouchGuard/releases), open it, and drag TouchGuard to Applications. The app is signed with Developer ID and notarised by Apple. It updates itself with Sparkle (**Check for Updates…** in the menu).
-- **Homebrew:** coming later.
+- **Homebrew:** `brew install --cask sjhorn/tap/touchguard`. This installs the app and links the `touchguard` command-line tool onto your `PATH`.
 - **Mac App Store:** submitted on a best-effort basis; this README will link it if Apple approves it. The App Store version is sandboxed, has no command-line tool and is updated by the store.
 
 Requires macOS 14 Sonoma or later, on Apple silicon or Intel.
@@ -81,7 +81,7 @@ TouchGuard collects no data. It has no analytics and no accounts, and it sends n
 
 ## Command-line tool
 
-The download version includes the CLI inside the app. To put it on your `PATH`:
+The download version includes the CLI inside the app. Homebrew links it for you. Otherwise, put it on your `PATH` with:
 
 ```sh
 sudo ln -sf /Applications/TouchGuard.app/Contents/Helpers/touchguard /usr/local/bin/touchguard

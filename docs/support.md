@@ -50,7 +50,7 @@ Menu → **Launch at Login**.
 Press **⌃⌥⌘T**, or use **Enabled** in the menu.
 
 ### How do I uninstall it?
-Quit TouchGuard, drag it from Applications to the Trash, and remove it from **Privacy & Security → Accessibility** (and Input Monitoring) if it's still listed.
+If you installed it with Homebrew, run `brew uninstall --cask touchguard` (add `--zap` to also remove its settings). Otherwise, quit TouchGuard, drag it from Applications to the Trash, and remove it from **Privacy & Security → Accessibility** (and Input Monitoring) if it's still listed.
 
 ### Is there a command-line version?
 Yes, in the download version: `/Applications/TouchGuard.app/Contents/Helpers/touchguard -h`. See the [README](https://github.com/sjhorn/TouchGuard#command-line-tool).

@@ -74,7 +74,8 @@ My Apps → **+** → New App: platform macOS, name **TouchGuard** (if it's take
    git tag v2.0.1 && git push origin v2.0.1
    ```
 3. The **Release** workflow archives the app, notarises it and the DMG, publishes the GitHub Release with the DMG, and commits the new `docs/appcast.xml` to `master`.
-4. Store: run `scripts/release.sh appstore` locally. It signs with your Xcode account, which as account holder can create the Apple Distribution and Mac Installer Distribution certificates. The CI job (Actions → **Release** → Run workflow → `appstore`) only works with an **Admin** API key, because cloud-managed signing isn't available to App Manager keys ("Cloud signing permission error"). Then in App Store Connect, add the build to TestFlight and test it, and finally submit it for review.
+4. Homebrew: the [sjhorn/homebrew-tap](https://github.com/sjhorn/homebrew-tap) **Update casks** workflow picks up the new release within a day. To update it straight away, run `gh workflow run update-casks.yml --repo sjhorn/homebrew-tap`.
+5. Store: run `scripts/release.sh appstore` locally. It signs with your Xcode account, which as account holder can create the Apple Distribution and Mac Installer Distribution certificates. The CI job (Actions → **Release** → Run workflow → `appstore`) only works with an **Admin** API key, because cloud-managed signing isn't available to App Manager keys ("Cloud signing permission error"). Then in App Store Connect, add the build to TestFlight and test it, and finally submit it for review.
 
 ### Locally
 ```sh

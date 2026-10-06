@@ -10,6 +10,8 @@ TouchGuard holds back trackpad clicks for a moment after each key release, so a 
 
 [**Download for macOS**](https://github.com/sjhorn/TouchGuard/releases/latest) · macOS 14 or later · signed and notarised
 
+Or with Homebrew: `brew install --cask sjhorn/tap/touchguard`
+
 <p>
   <img src="images/menu.png" alt="The TouchGuard menu" width="251">
   &nbsp;

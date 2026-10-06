@@ -13,19 +13,34 @@ protocol TapBackend: AnyObject {
     func invalidate()
 }
 
-/// The real tap: an active CGEventTap at the HID level, delivered on the main run loop.
+/// The real tap: an active CGEventTap, delivered on the main run loop.
 @MainActor
 final class CGEventTapBackend: TapBackend {
+    /// HID for the Developer ID build. The sandboxed build uses the session
+    /// tap, which the sandbox spike confirmed can drop clicks there
+    /// (docs/notes/sandbox-spike.md).
+    static var defaultLocation: CGEventTapLocation {
+        switch Permissions.mode {
+        case .accessibility: .cghidEventTap
+        case .inputMonitoringAndPostEvent: .cgSessionEventTap
+        }
+    }
+
+    private let location: CGEventTapLocation
     private var port: CFMachPort?
     private var source: CFRunLoopSource?
     private var handler: (@MainActor (CGEventType) -> Bool)?
+
+    init(location: CGEventTapLocation = CGEventTapBackend.defaultLocation) {
+        self.location = location
+    }
 
     func create(mask: CGEventMask, handler: @escaping @MainActor (CGEventType) -> Bool) -> Bool {
         invalidate()
         self.handler = handler
         let refcon = Unmanaged.passUnretained(self).toOpaque()
         guard let port = CGEvent.tapCreate(
-            tap: .cghidEventTap,
+            tap: location,
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: mask,

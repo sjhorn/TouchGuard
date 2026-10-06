@@ -5,7 +5,7 @@ There are two channels:
 | Channel | Target | Signing | Updates | CLI |
 |---------|--------|---------|---------|-----|
 | Download (DMG) | `TouchGuard` | Developer ID, notarised | Sparkle 2 | included |
-| Mac App Store | `TouchGuardMAS` (if it exists, see [the sandbox spike](notes/sandbox-spike.md)) | App Store, automatic | the store | no |
+| Mac App Store | `TouchGuardMAS`, sandboxed (see [the sandbox spike](notes/sandbox-spike.md)) | App Store, automatic | the store | no |
 
 Both use the bundle ID `com.hornmicro.TouchGuard` and team `ZUKW8RPUVQ`.
 

@@ -101,13 +101,14 @@ xcodebuild -scheme TouchGuard test                    # also the app model tests
 ### Project layout
 
 ```
-TouchGuard.xcodeproj    targets: TouchGuard (Developer ID), TouchGuardCLI, TouchGuardTests
+TouchGuard.xcodeproj    targets: TouchGuard (Developer ID), TouchGuardMAS (App Store, sandboxed),
+                        TouchGuardCLI, TouchGuardTests
 TouchGuardCore/         Swift package shared by the app and CLI
   ClickFilter           the pure pass/block decision logic
   EventTapController    tap lifecycle, re-enabling and watchdog
   TapBackend            the real CGEventTap behind a protocol (faked in tests)
   Permissions           permission mode, check, prompt and Settings link
-TouchGuardApp/          SwiftUI menu bar app
+TouchGuardApp/          SwiftUI menu bar app (shared by both app targets)
 TouchGuardCLI/          command-line tool
 TouchGuardTests/        app model tests
 Config/                 Info.plist fragments

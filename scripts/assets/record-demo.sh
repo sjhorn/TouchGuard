@@ -6,7 +6,7 @@
 # half is recorded, which keeps desktop icons and widgets out of the video.
 #
 # Needs: Screen Recording and Accessibility for the terminal; TouchGuard active.
-# Usage: scripts/assets/record-demo.sh [output.mov]   (default build/demo/touchguard-demo.mov)
+# Usage: scripts/assets/record-demo.sh [output.mov]   (default build/demo/touchguard-demo.mov, 50 s)
 set -euo pipefail
 root=$(cd "$(dirname "$0")/../.." && pwd)
 out=${1:-$root/build/demo/touchguard-demo.mov}
@@ -54,7 +54,7 @@ osascript -e 'tell application "System Events" to key code 53' -e 'tell applicat
 sleep 0.5
 
 # x,y,w,h in points: TextEdit (360…1560) plus the TouchGuard menu, from the top of the screen.
-screencapture -v -k -x -V 58 -R 352,0,1290,820 "$out" &
+screencapture -v -k -x -V 50 -R 352,0,1290,820 "$out" &
 recorder=$!
 sleep 2
 

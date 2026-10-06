@@ -3,7 +3,7 @@
 **Automated:** with TouchGuard (the App Store build) running and active, and Screen Recording and Accessibility granted to the terminal, run:
 
 ```sh
-scripts/assets/record-demo.sh      # build/demo/touchguard-demo.mov, about 58 s
+scripts/assets/record-demo.sh      # build/demo/touchguard-demo.mov, 50 s
 ```
 
 The script does the following:

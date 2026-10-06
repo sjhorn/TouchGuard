@@ -102,7 +102,11 @@ release_devid() {
     if [[ $(sandbox_entitlement "$app") == true ]]; then
         echo "error: the Developer ID build is sandboxed" >&2; exit 1
     fi
-    codesign -d --verbose=2 "$app" 2>&1 | grep -q 'flags=.*runtime' || { echo "error: hardened runtime is off" >&2; exit 1; }
+    # Capture first: grep -q can exit before codesign finishes writing, and the
+    # SIGPIPE then fails the pipeline under pipefail.
+    local signature_info
+    signature_info=$(codesign -d --verbose=2 "$app" 2>&1)
+    [[ $signature_info == *"(runtime)"* ]] || { echo "error: hardened runtime is off" >&2; exit 1; }
     xcrun stapler validate "$app"
     xcrun stapler validate "$dmg"
     spctl -a -vvv -t execute "$app"
@@ -141,7 +145,7 @@ release_appstore() {
         -project "$project" -scheme TouchGuardMAS -configuration Release \
         -archivePath "$archive" -derivedDataPath "$derived" \
         MARKETING_VERSION="$version" CURRENT_PROJECT_VERSION="$build_number" \
-        -allowProvisioningUpdates "${asc_auth_xcodebuild[@]}" | xcbeautify_or_cat
+        -allowProvisioningUpdates ${asc_auth_xcodebuild[@]+"${asc_auth_xcodebuild[@]}"} | xcbeautify_or_cat
 
     [[ $(sandbox_entitlement "$archive/Products/Applications/TouchGuard.app") == true ]] \
         || { echo "error: the App Store build isn't sandboxed" >&2; exit 1; }
@@ -149,7 +153,7 @@ release_appstore() {
     step "Uploading to App Store Connect"
     xcodebuild -exportArchive -archivePath "$archive" -exportPath "$out/appstore/export" \
         -exportOptionsPlist scripts/ExportOptions-AppStore.plist \
-        -allowProvisioningUpdates "${asc_auth_xcodebuild[@]}" | xcbeautify_or_cat
+        -allowProvisioningUpdates ${asc_auth_xcodebuild[@]+"${asc_auth_xcodebuild[@]}"} | xcbeautify_or_cat
 
     step "Done: build $build_number is processing in App Store Connect"
 }

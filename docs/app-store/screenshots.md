@@ -1,3 +1,18 @@
+# Screenshots
+
+**How they're made:** 2× captures of the **App Store build** (no "Check for Updates…") are kept in `docs/app-store/captures/`. Then:
+
+```sh
+swift scripts/assets/make-appstore-screenshots.swift     # build/appstore-screenshots/*.jpg, 2880×1800, no alpha
+ASC_KEY_PATH=… ASC_KEY_ID=… ASC_ISSUER_ID=… scripts/appstore-upload-screenshots.sh <appStoreVersion id>
+```
+
+The upload replaces the version's Mac screenshots.
+
+To retake the captures, switch the display to a Retina "Looks like" mode. Run the App Store build (`TouchGuardMAS`), open the window or menu, and capture just that window with `screencapture -o -l <window id>`.
+
+---
+
 # Screenshot checklist
 
 Mac screenshots must be 16:10 at one of 1280×800, 1440×900, 2560×1600 or 2880×1800 (PNG or JPEG, no alpha). Use **2880×1800**. 1–10 screenshots.

@@ -1,5 +1,9 @@
 import CoreGraphics
 import Foundation
+import os
+
+/// Tap lifecycle and decisions. Never logs key codes or characters, only event types.
+let tapLog = Logger(subsystem: "com.hornmicro.TouchGuard", category: "tap")
 
 /// Owns the CGEventTap: creates it, feeds events through a `ClickFilter`,
 /// re-enables it when macOS switches it off, and tracks the tap's permissions.
@@ -25,7 +29,11 @@ public final class EventTapController {
     }
 
     public private(set) var state: State = .paused {
-        didSet { if state != oldValue { onStateChange?(state) } }
+        didSet {
+            guard state != oldValue else { return }
+            tapLog.notice("State \(String(describing: oldValue), privacy: .public) → \(String(describing: self.state), privacy: .public)")
+            onStateChange?(state)
+        }
     }
 
     /// Whether the user wants clicks to be guarded.
@@ -119,6 +127,7 @@ public final class EventTapController {
             self?.handle(type: type) ?? true
         }
         guard created else {
+            tapLog.error("Couldn't create the event tap")
             state = permissions.isGranted ? .failed : .needsPermission
             return
         }
@@ -137,12 +146,14 @@ public final class EventTapController {
     /// every event would wait for the tap to time out, stalling all input.
     private func tapWasDisabled(_ reason: RearmReason, at now: TimeInterval) {
         guard permissions.isGranted else {
+            tapLog.notice("Tap disabled (\(String(describing: reason), privacy: .public)) and permission is gone; removing it")
             teardown()
             state = .needsPermission
             return
         }
         recentDisables = recentDisables.filter { now - $0 < Self.rearmLoopWindow } + [now]
         guard recentDisables.count <= Self.rearmLoopLimit else {
+            tapLog.error("Tap disabled \(self.recentDisables.count) times in \(Self.rearmLoopWindow)s; backing off until the watchdog")
             teardown()
             state = .failed
             return
@@ -154,6 +165,7 @@ public final class EventTapController {
         guard hasTap else { return }
         backend.setEnabled(true)
         rearmCount += 1
+        tapLog.notice("Tap re-enabled (\(String(describing: reason), privacy: .public)), total \(self.rearmCount)")
         onRearm?(reason)
     }
 
@@ -170,6 +182,7 @@ public final class EventTapController {
             tapWasDisabled(.userInput, at: now)
             return true
         case .keyUp:
+            tapLog.debug("Key released")
             filter.keyReleased(at: now)
             onKeyRelease?(filter.blockUntil)
             return true
@@ -177,6 +190,7 @@ public final class EventTapController {
             guard let mouse = Self.mouseEvent(for: type) else { return true }
             let before = filter.blockedClicks
             let decision = filter.decide(mouse, at: now)
+            tapLog.debug("Mouse \(String(describing: mouse), privacy: .public) → \(String(describing: decision), privacy: .public)")
             if filter.blockedClicks != before {
                 onBlock?(filter.blockedClicks)
             }

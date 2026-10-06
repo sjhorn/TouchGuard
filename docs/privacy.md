@@ -22,7 +22,7 @@ TouchGuard is made by Scott Horn ("I"). This policy covers the TouchGuard app fo
 ## Network
 
 - **Mac App Store version:** makes no network requests.
-- **Download version:** checks for updates with [Sparkle](https://sparkle-project.org). It fetches `https://sjhorn.github.io/TouchGuard/appcast.xml` from GitHub Pages (by default at most once a day) and downloads updates from GitHub Releases. Sparkle doesn't send system profile information, because TouchGuard doesn't turn that option on. GitHub, as the host, may log requests, as any web server does. See [GitHub's privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).
+- **Download version:** checks for updates with [Sparkle](https://sparkle-project.org). It fetches `https://blog.hornmicro.com/TouchGuard/appcast.xml` from GitHub Pages (by default at most once a day) and downloads updates from GitHub Releases. Sparkle doesn't send system profile information, because TouchGuard doesn't turn that option on. GitHub, as the host, may log requests, as any web server does. See [GitHub's privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).
 
 ## Children
 

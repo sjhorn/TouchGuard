@@ -15,6 +15,12 @@ It lives in the menu bar and has a command-line tool (`touchguard`) for scriptin
 
 Based on the original [TouchGuard by SyntaxSoft](https://github.com/thesyntaxinator/TouchGuard) (2016). See [NOTICE](NOTICE).
 
+<p align="center">
+  <img src="docs/images/menu.png" alt="The TouchGuard menu: Active, 200 ms, with delay, blocked clicks, Launch at Login and the global shortcut" width="239">
+  &nbsp;&nbsp;
+  <img src="docs/images/onboarding.png" alt="The first-launch window explaining why TouchGuard needs Accessibility permission" width="431">
+</p>
+
 ## Install
 
 - **Download (recommended):** get `TouchGuard-<version>.dmg` from [Releases](https://github.com/sjhorn/TouchGuard/releases), open it, and drag TouchGuard to Applications. The app is signed with Developer ID and notarised by Apple. It updates itself with Sparkle (**Check for Updates…** in the menu).
@@ -43,6 +49,8 @@ The menu has:
 - **Launch at Login**
 - **Global Shortcut ⌃⌥⌘T**, to turn the hotkey on or off
 - **Check for Updates…** (download version only), About, Quit
+
+<img src="docs/images/custom-delay.png" alt="The Custom Delay window with a slider from 50 to 1000 ms" width="347">
 
 Settings are remembered between launches. The default delay is 200 ms. If the cursor still jumps, try a longer delay. If the trackpad feels slow after typing, try a shorter one.
 

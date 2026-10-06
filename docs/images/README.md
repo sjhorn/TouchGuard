@@ -1,10 +1,14 @@
 # Images
 
-| File | What | How |
-|------|------|-----|
-| `banner.png` | README hero and GitHub social preview, 1280×640 | `swift scripts/assets/make-banner.swift` |
-| `menu.png` | the menu open, "Active, 200 ms" | ⌘⇧4, then Space, click the open menu; save at 2× |
-| `onboarding.png` | the permission window | ⌘⇧4, then Space, click the window |
-| `custom-delay.png` | the Custom Delay window | ⌘⇧4, then Space, click the window |
+| File | What | Used in |
+|------|------|---------|
+| `banner.png` | README hero and GitHub social preview, 1280×640. Made with `swift scripts/assets/make-banner.swift`. | README, site home |
+| `menu.png` | The menu while active | README, site home |
+| `onboarding.png` | The permission window | README |
+| `custom-delay.png` | The Custom Delay window | README, site home |
+| `systems-settings-accessibility.png` | TouchGuard's switch in Accessibility | support FAQ |
+| `about.png` | The About panel | spare, e.g. for the App Store or a press kit |
 
-Screenshots: light mode, plain wallpaper, a realistic blocked-click count. App Store screenshots (2880×1800) are listed in `docs/app-store/screenshots.md` and aren't committed here.
+To retake a screenshot, press ⌘⇧4, then Space, and click the window. Hold ⌥ while clicking to leave out the shadow. Use plain wallpaper, and make sure the menu shows a blocked-click count above zero.
+
+App Store screenshots (2880×1800) are listed in `docs/app-store/screenshots.md` and aren't committed here.

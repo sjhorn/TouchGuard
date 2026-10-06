@@ -12,7 +12,10 @@ Can't find your answer here? [Open an issue on GitHub](https://github.com/sjhorn
 ### Why does TouchGuard need Accessibility or Input Monitoring permission?
 To hold back a click, TouchGuard has to see that you just released a key and then stop the click from reaching other apps. macOS only lets apps do this with your permission. TouchGuard **never reads which keys you press or what you type**. It only checks *that* a key was released.
 
-- Download version: **System Settings → Privacy & Security → Accessibility**, turn on TouchGuard.
+- Download version: **System Settings → Privacy & Security → Accessibility**, turn on TouchGuard:
+
+  ![TouchGuard in the Accessibility list, with its switch](images/systems-settings-accessibility.png)
+
 - Mac App Store version: **System Settings → Privacy & Security → Input Monitoring**, turn on TouchGuard, and also under **Accessibility**.
 
 ### I turned the permission on, but the window won't go away.

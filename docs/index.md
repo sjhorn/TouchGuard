@@ -10,6 +10,12 @@ TouchGuard holds back trackpad clicks for a moment after each key release, so a 
 
 [**Download for macOS**](https://github.com/sjhorn/TouchGuard/releases/latest) · macOS 14 or later · signed and notarised
 
+<p>
+  <img src="images/menu.png" alt="The TouchGuard menu" width="239">
+  &nbsp;
+  <img src="images/custom-delay.png" alt="The Custom Delay window" width="347">
+</p>
+
 ## Features
 
 - Blocks clicks for 50–1000 ms after each key release (default 200 ms)

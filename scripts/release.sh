@@ -102,7 +102,11 @@ release_devid() {
     if [[ $(sandbox_entitlement "$app") == true ]]; then
         echo "error: the Developer ID build is sandboxed" >&2; exit 1
     fi
-    codesign -d --verbose=2 "$app" 2>&1 | grep -q 'flags=.*runtime' || { echo "error: hardened runtime is off" >&2; exit 1; }
+    # Capture first: grep -q can exit before codesign finishes writing, and the
+    # SIGPIPE then fails the pipeline under pipefail.
+    local signature_info
+    signature_info=$(codesign -d --verbose=2 "$app" 2>&1)
+    [[ $signature_info == *"(runtime)"* ]] || { echo "error: hardened runtime is off" >&2; exit 1; }
     xcrun stapler validate "$app"
     xcrun stapler validate "$dmg"
     spctl -a -vvv -t execute "$app"

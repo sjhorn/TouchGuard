@@ -31,6 +31,13 @@ Some apps turn on macOS **Secure Event Input** to protect what you type. Passwor
 
 TouchGuard goes back to "Active" by itself within a couple of seconds once secure input is off.
 
+### TouchGuard says "Active" but never blocks anything. {#active-but-not-blocking}
+TouchGuard isn't seeing your typing. Check, in this order:
+
+1. **Secure input.** If the menu bar icon is a 🔒, see [the secure input answer](#secure-input).
+2. **Input Monitoring.** Open **System Settings → Privacy & Security → Input Monitoring**. The download version doesn't need to be listed there. But if **TouchGuard is listed and switched off**, macOS hides your typing from it, even with Accessibility on. Switch it on, or remove it with **−**, then quit and reopen TouchGuard. (The App Store version needs it switched on.)
+3. **Old copies.** If you've had more than one copy of TouchGuard (for example a beta build), remove every TouchGuard entry from Accessibility and Input Monitoring. Then open the copy in Applications and grant permission again.
+
 ### The cursor still jumps while I type.
 Choose a longer delay: menu → **Delay** → 300 or 500 ms, or **Custom…**.
 

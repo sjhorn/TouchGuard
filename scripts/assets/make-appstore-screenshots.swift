@@ -16,7 +16,7 @@ let shots = [
     Shot(file: "2-delay", title: "Tune it to your typing",
          subtitle: "Choose 50–1000 ms. Changes apply instantly.", image: "custom-delay.png", scale: 1.8),
     Shot(file: "3-private", title: "Private by design",
-         subtitle: "TouchGuard never reads, records or sends what you type.", image: "onboarding.png", scale: 1.3),
+         subtitle: "TouchGuard never reads, records or sends what you type.", image: "onboarding.png", scale: 1.25),
 ]
 
 func draw(_ text: String, size: CGFloat, weight: NSFont.Weight, color: NSColor, centerY: CGFloat) {

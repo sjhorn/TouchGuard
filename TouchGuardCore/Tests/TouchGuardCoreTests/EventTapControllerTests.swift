@@ -295,4 +295,12 @@ struct EventTapControllerTests {
         #expect(!backend.send(.leftMouseDown))
         c.stop()
     }
+
+    @Test func requirementsPerMode() {
+        #expect(Permissions.requirements(for: .accessibility) == [.accessibility])
+        // Post-event access first: it often covers listening too.
+        #expect(Permissions.requirements(for: .inputMonitoringAndPostEvent) == [.postEvents, .listenEvents])
+        #expect(PermissionRequirement.postEvents.settingsURL == PermissionRequirement.accessibility.settingsURL)
+        #expect(PermissionRequirement.listenEvents.settingsURL.absoluteString.hasSuffix("Privacy_ListenEvent"))
+    }
 }

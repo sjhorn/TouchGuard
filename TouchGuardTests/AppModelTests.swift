@@ -136,7 +136,7 @@ final class AppModelTests {
         // Going through stateChanged(to: .needsPermission) would open the onboarding window.
         let expected = switch Permissions.mode {
         case .accessibility: "Needs Accessibility permission"
-        case .inputMonitoringAndPostEvent: "Needs Input Monitoring permission"
+        case .inputMonitoringAndPostEvent: "Needs permission"
         }
         #expect(model.statusText(for: .needsPermission) == expected)
         #expect(model.menuBarSymbol(for: .needsPermission) == "exclamationmark.triangle")

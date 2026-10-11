@@ -17,7 +17,8 @@
 set -euo pipefail
 root=$(cd "$(dirname "$0")/../.." && pwd)
 out=${1:-$root/build/demo/touchguard-review.mov}
-source_app=$root/build/mas/Build/Products/Release/TouchGuard.app
+# Default: the app from the last `release.sh appstore` archive (the uploaded build).
+source_app=${APP_SOURCE:-$root/build/release/appstore/TouchGuardMAS.xcarchive/Products/Applications/TouchGuard.app}
 app=$HOME/Applications/TouchGuard.app
 installed=/Applications/TouchGuard.app
 lsregister=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
@@ -41,12 +42,26 @@ pkill -f "TouchGuard.app/Contents/MacOS/TouchGuard" || true
 mkdir -p "$HOME/Applications"
 rm -rf "$app"
 ditto "$source_app" "$app"
-[[ -d $installed ]] && "$lsregister" -u "$installed"
+# Move the installed (download) copy out of the way: when a permission change
+# makes macOS "Quit & Reopen" TouchGuard, it relaunches by bundle ID and would
+# otherwise pick /Applications/TouchGuard.app. Put back on exit, whatever happens.
+stash=$root/build/stash
+if [[ -d $installed ]]; then
+    mkdir -p "$stash"
+    rm -rf "$stash/TouchGuard.app"
+    "$lsregister" -u "$installed"
+    mv "$installed" "$stash/TouchGuard.app"
+fi
 restore() {
-    [[ -d $installed ]] && "$lsregister" -f "$installed"
+    pkill -f "$app/Contents/MacOS/TouchGuard" || true
+    if [[ -d $stash/TouchGuard.app && ! -e $installed ]]; then
+        mv "$stash/TouchGuard.app" "$installed"
+        "$lsregister" -f "$installed"
+        echo "Moved TouchGuard back to $installed"
+    fi
     return 0
 }
-trap restore EXIT
+trap restore EXIT INT TERM
 "$lsregister" -f "$app"
 for service in Accessibility ListenEvent PostEvent; do
     tccutil reset "$service" com.hornmicro.TouchGuard >/dev/null
@@ -117,6 +132,12 @@ APPLESCRIPT
 )
 read -r button_x button_y <<< "$button_center"
 [[ -n ${button_x:-} ]] || { kill -INT $recorder; wait $recorder || true; echo "error: Open Privacy Settings button not found" >&2; exit 1; }
+# The window is in front but TouchGuard isn't the active app, and a first click
+# on an inactive app's window only activates it. Click the title bar first.
+title_center=$(osascript -e 'tell application "System Events" to tell process "TouchGuard" to tell window "TouchGuard Permission" to return (((item 1 of (get position)) + (item 1 of (get size)) / 2) as integer as text) & " " & (((item 2 of (get position)) + 14) as integer as text)')
+read -r title_x title_y <<< "$title_center"
+DEMO_STEP=click "$driver" "$title_x" "$title_y"
+sleep 0.8
 DEMO_STEP=click "$driver" "$button_x" "$button_y"
 
 say "Waiting for the permissions to be granted by hand (up to 3 minutes)"
@@ -173,4 +194,4 @@ wait $recorder || true
 [[ -s $out ]] || { echo "error: no video was written" >&2; exit 1; }
 osascript -e 'tell application "TextEdit" to close front document saving no' >/dev/null 2>&1 || true
 say "Recorded $out"
-echo "Re-grant Accessibility to /Applications/TouchGuard.app when you go back to the download version."
+echo "Open /Applications/TouchGuard.app and re-grant Accessibility to go back to the download version."

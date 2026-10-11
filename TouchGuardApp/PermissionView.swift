@@ -42,9 +42,8 @@ struct PermissionView: View {
                       systemImage: isGranted ? "checkmark.circle.fill" : "clock")
                     .foregroundStyle(isGranted ? .green : .secondary)
                 Spacer()
-                Button(buttonTitle) {
-                    Permissions.request()
-                    Permissions.openSettings()
+                Button("Continue") {
+                    Task { await Permissions.continueSetup() }
                 }
                 .keyboardShortcut(.defaultAction)
             }
@@ -65,7 +64,7 @@ struct PermissionView: View {
     private var title: LocalizedStringKey {
         switch mode {
         case .accessibility: "TouchGuard needs Accessibility permission"
-        case .inputMonitoringAndPostEvent: "TouchGuard needs Input Monitoring permission"
+        case .inputMonitoringAndPostEvent: "TouchGuard needs your permission"
         }
     }
 
@@ -81,21 +80,15 @@ struct PermissionView: View {
     private var steps: [LocalizedStringKey] {
         switch mode {
         case .accessibility:
-            ["Click **Open Accessibility Settings**.",
-             "Turn on **TouchGuard** in the list.",
+            ["Click **Continue**.",
+             "When macOS asks, click **Open System Settings**.",
+             "Turn on **TouchGuard** under **Accessibility**.",
              "This window closes by itself and blocking starts."]
         case .inputMonitoringAndPostEvent:
-            ["Click **Open Privacy Settings**.",
-             "Turn on **TouchGuard** under **Input Monitoring**.",
-             "Turn on **TouchGuard** under **Accessibility** too.",
+            ["Click **Continue**.",
+             "When macOS asks, click **Open System Settings**.",
+             "Turn on **TouchGuard** in the list (Accessibility, and Input Monitoring if asked).",
              "This window closes by itself and blocking starts."]
-        }
-    }
-
-    private var buttonTitle: LocalizedStringKey {
-        switch mode {
-        case .accessibility: "Open Accessibility Settings"
-        case .inputMonitoringAndPostEvent: "Open Privacy Settings"
         }
     }
 }

@@ -6,6 +6,7 @@ All notable changes are listed here. Versions follow [Semantic Versioning](https
 
 ### Fixed
 - On first launch, the permission window could open behind the app TouchGuard was launched from (for example Finder), so it was easy to miss. It now always opens in front.
+- Clicking the permission window's button opened System Settings and macOS's own permission prompt at the same time, leaving the prompt stranded behind Settings. The button is now **Continue**: it asks for one permission at a time and opens System Settings only if macOS doesn't show its prompt.
 
 ## [2.0.0] - 2026-10-06
 

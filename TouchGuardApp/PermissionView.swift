@@ -37,8 +37,14 @@ struct PermissionView: View {
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                ForEach(Array(Permissions.requirements.enumerated()), id: \.offset) { _, requirement in
+                ForEach(Array(visibleRequirements.enumerated()), id: \.offset) { _, requirement in
                     checklistRow(requirement)
+                }
+                if visibleRequirements.contains(.listenEvents) {
+                    Text("On this Mac, macOS also needs **Input Monitoring**. Click **Continue** and allow it the same way.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             .padding(10)
@@ -68,8 +74,10 @@ struct PermissionView: View {
                 granted = now
                 if Permissions.isGranted {
                     model.permissionGranted()
-                } else if Permissions.needsRelaunchToSeeGrant {
+                } else if setupStarted && Permissions.needsRelaunchToSeeGrant {
                     // Granted in System Settings, but this process can't see it.
+                    // Only after Continue: probing by creating a tap makes macOS
+                    // show its permission prompt, which mustn't pop up unasked.
                     model.relaunchToApplyPermission()
                 } else if newlyGranted && setupStarted {
                     // One permission just came through: ask for the next one
@@ -84,7 +92,7 @@ struct PermissionView: View {
     private var title: LocalizedStringKey {
         switch mode {
         case .accessibility: "TouchGuard needs Accessibility permission"
-        case .inputMonitoringAndPostEvent: "TouchGuard needs your permission"
+        case .inputMonitoringAndPostEvent: "TouchGuard needs Accessibility permission"
         }
     }
 
@@ -93,7 +101,7 @@ struct PermissionView: View {
         case .accessibility:
             "To stop accidental trackpad taps while you type, TouchGuard needs to notice when you release a key and briefly hold back clicks. macOS only allows this for apps you've allowed under Accessibility."
         case .inputMonitoringAndPostEvent:
-            "To stop accidental trackpad taps while you type, TouchGuard needs to notice when you release a key and briefly hold back clicks. macOS only allows this for apps you've allowed under Input Monitoring and Accessibility."
+            "To stop accidental trackpad taps while you type, TouchGuard needs to notice when you release a key and briefly hold back clicks. macOS only allows this for apps you've allowed under Accessibility."
         }
     }
 
@@ -106,9 +114,19 @@ struct PermissionView: View {
         case .inputMonitoringAndPostEvent:
             ["Click **Continue**.",
              "When macOS asks, click **Open System Settings** and turn on **TouchGuard**.",
-             "TouchGuard then asks for the next permission by itself. Allow it the same way.",
              "This window closes by itself and blocking starts."]
         }
+    }
+
+    /// Input Monitoring is usually covered by Accessibility, so its row only
+    /// appears once Accessibility is granted and macOS still wants it.
+    private var visibleRequirements: [PermissionRequirement] {
+        Permissions.requirements.enumerated().filter { index, requirement in
+            guard requirement == .listenEvents else { return true }
+            let previousGranted = granted.indices.contains(index - 1) && granted[index - 1]
+            let thisGranted = granted.indices.contains(index) && granted[index]
+            return previousGranted && !thisGranted
+        }.map(\.element)
     }
 
     private static func currentGrants() -> [Bool] {

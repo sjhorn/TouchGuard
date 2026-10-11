@@ -118,7 +118,7 @@ final class AppModel {
         case .needsPermission:
             switch Permissions.mode {
             case .accessibility: "Needs Accessibility permission"
-            case .inputMonitoringAndPostEvent: "Needs permission"
+            case .inputMonitoringAndPostEvent: "Needs Accessibility permission"
             }
         case .failed: "Couldn't start the event tap"
         }

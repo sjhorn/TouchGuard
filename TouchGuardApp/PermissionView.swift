@@ -3,7 +3,10 @@ import TouchGuardCore
 
 struct PermissionView: View {
     let model: AppModel
-    @State private var isGranted = Permissions.isGranted
+    @State private var granted = Self.currentGrants()
+    /// Set once the person clicks Continue; after that, each newly granted
+    /// permission moves straight on to asking for the next one.
+    @State private var setupStarted = false
     private let mode = Permissions.mode
 
     var body: some View {
@@ -28,9 +31,19 @@ struct PermissionView: View {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(verbatim: "\(index + 1).")
                         Text(step)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
+
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(Array(Permissions.requirements.enumerated()), id: \.offset) { _, requirement in
+                    checklistRow(requirement)
+                }
+            }
+            .padding(10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
 
             Text("Already on but this window stays open? Remove TouchGuard from the list with −, then add it again.")
                 .font(.callout)
@@ -38,11 +51,9 @@ struct PermissionView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack {
-                Label(isGranted ? "Permission granted" : "Waiting for permission…",
-                      systemImage: isGranted ? "checkmark.circle.fill" : "clock")
-                    .foregroundStyle(isGranted ? .green : .secondary)
                 Spacer()
                 Button("Continue") {
+                    setupStarted = true
                     Task { await Permissions.continueSetup() }
                 }
                 .keyboardShortcut(.defaultAction)
@@ -52,9 +63,18 @@ struct PermissionView: View {
         .frame(width: 440)
         .task {
             while !Task.isCancelled {
-                isGranted = Permissions.isGranted
-                if isGranted {
+                let now = Self.currentGrants()
+                let newlyGranted = now.indices.contains { now[$0] && !granted[$0] }
+                granted = now
+                if Permissions.isGranted {
                     model.permissionGranted()
+                } else if Permissions.needsRelaunchToSeeGrant {
+                    // Granted in System Settings, but this process can't see it.
+                    model.relaunchToApplyPermission()
+                } else if newlyGranted && setupStarted {
+                    // One permission just came through: ask for the next one
+                    // straight away instead of waiting for another click.
+                    await Permissions.continueSetup()
                 }
                 try? await Task.sleep(for: .seconds(1))
             }
@@ -81,14 +101,41 @@ struct PermissionView: View {
         switch mode {
         case .accessibility:
             ["Click **Continue**.",
-             "When macOS asks, click **Open System Settings**.",
-             "Turn on **TouchGuard** under **Accessibility**.",
+             "When macOS asks, click **Open System Settings** and turn on **TouchGuard**.",
              "This window closes by itself and blocking starts."]
         case .inputMonitoringAndPostEvent:
             ["Click **Continue**.",
-             "When macOS asks, click **Open System Settings**.",
-             "Turn on **TouchGuard** in the list (Accessibility, and Input Monitoring if asked).",
+             "When macOS asks, click **Open System Settings** and turn on **TouchGuard**.",
+             "TouchGuard then asks for the next permission by itself. Allow it the same way.",
              "This window closes by itself and blocking starts."]
+        }
+    }
+
+    private static func currentGrants() -> [Bool] {
+        Permissions.requirements.map(\.isGranted)
+    }
+
+    @ViewBuilder
+    private func checklistRow(_ requirement: PermissionRequirement) -> some View {
+        let index = Permissions.requirements.firstIndex(of: requirement) ?? 0
+        let isAllowed = granted.indices.contains(index) && granted[index]
+        let isNext = !isAllowed && Permissions.requirements.indices
+            .first(where: { !(granted.indices.contains($0) && granted[$0]) }) == index
+        HStack {
+            Image(systemName: isAllowed ? "checkmark.circle.fill" : (isNext ? "arrow.right.circle" : "circle"))
+                .foregroundStyle(isAllowed ? AnyShapeStyle(.green) : AnyShapeStyle(.secondary))
+            Text(name(of: requirement))
+                .fontWeight(isNext ? .semibold : .regular)
+            Spacer()
+            Text(isAllowed ? "Allowed" : (isNext ? "Next" : "Waiting"))
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func name(of requirement: PermissionRequirement) -> LocalizedStringKey {
+        switch requirement {
+        case .accessibility, .postEvents: "Accessibility"
+        case .listenEvents: "Input Monitoring"
         }
     }
 }

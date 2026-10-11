@@ -116,6 +116,29 @@ public enum Permissions {
         }
     }
 
+    /// Whether an active event tap can be created right now. In the sandbox,
+    /// CGPreflight…Access is read once per launch and doesn't notice a
+    /// permission granted while the app runs; creating a tap is checked live.
+    public static func canCreateEventTap() -> Bool {
+        let mask = CGEventMask(1 << CGEventType.leftMouseDown.rawValue)
+        guard let port = CGEvent.tapCreate(
+            tap: .cgSessionEventTap, place: .tailAppendEventTap, options: .defaultTap,
+            eventsOfInterest: mask,
+            callback: { _, _, event, _ in Unmanaged.passUnretained(event) },
+            userInfo: nil
+        ) else { return false }
+        CGEvent.tapEnable(tap: port, enable: false)
+        CFMachPortInvalidate(port)
+        return true
+    }
+
+    /// True when a permission was granted while the app was running but this
+    /// process can't see it yet: the tap can be created, yet the (cached)
+    /// post-event check still says no. Relaunching picks it up.
+    public static var needsRelaunchToSeeGrant: Bool {
+        mode == .inputMonitoringAndPostEvent && !PermissionRequirement.postEvents.isGranted && canCreateEventTap()
+    }
+
     /// Whether macOS's permission prompt ("… would like to control this
     /// computer / receive keystrokes") is on screen. It is drawn by the
     /// universalAccessAuthWarn agent; window owner names need no permission.

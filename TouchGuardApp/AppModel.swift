@@ -268,6 +268,11 @@ final class AppModel {
         }()
         NSApp.activate()
         window.makeKeyAndOrderFront(nil)
+        // Activation is only a request since macOS 14: when the app that
+        // launched us (e.g. Finder) keeps focus, the window would open behind
+        // it. Bring it forward anyway, at normal level so System Settings can
+        // still come in front of it.
+        window.orderFrontRegardless()
         return window
     }
 }

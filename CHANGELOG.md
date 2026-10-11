@@ -2,6 +2,11 @@
 
 All notable changes are listed here. Versions follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Fixed
+- On first launch, the permission window could open behind the app TouchGuard was launched from (for example Finder), so it was easy to miss. It now always opens in front.
+
 ## [2.0.0] - 2026-10-06
 
 A rewrite in Swift, with a menu bar app.

@@ -3,7 +3,7 @@
 // The events are real CGEvents, so TouchGuard filters them exactly as it would
 // a palm on the trackpad.
 //
-// Usage: DEMO_STEP=typing|hotkey|paused demo-input <tapX> <tapY>   (screen points, top-left origin)
+// Usage: DEMO_STEP=typing|hotkey|paused|click|doubleclick demo-input <tapX> <tapY>   (screen points, top-left origin)
 import CoreGraphics
 import Foundation
 
@@ -103,4 +103,24 @@ if mode == "paused" {
     pause(1.5)
     key(125, flags: .maskCommand)
     type("\n\nPress ⌃⌥⌘T again to resume. TouchGuard never reads what you type.")
+}
+
+if mode == "click" {
+    move(to: tapPoint, duration: 0.6)
+    pause(0.2)
+    click(at: tapPoint)
+}
+
+if mode == "doubleclick" {
+    move(to: tapPoint, duration: 0.8)
+    pause(0.3)
+    for clickCount in [1, 2] {
+        for type in [CGEventType.leftMouseDown, .leftMouseUp] {
+            let event = CGEvent(mouseEventSource: source, mouseType: type, mouseCursorPosition: tapPoint, mouseButton: .left)!
+            event.setIntegerValueField(.mouseEventClickState, value: Int64(clickCount))
+            event.flags = []
+            event.post(tap: .cghidEventTap)
+            pause(0.04)
+        }
+    }
 }

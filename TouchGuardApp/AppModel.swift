@@ -1,5 +1,6 @@
 import AppKit
 import Observation
+import os
 import ServiceManagement
 import SwiftUI
 import TouchGuardCore
@@ -211,6 +212,24 @@ final class AppModel {
             controller.checkHealth()
         } else {
             closePermissionWindow()
+        }
+    }
+
+    /// Starts a fresh copy of the app and quits this one. Used once a
+    /// permission was granted that this process can't see (see
+    /// `Permissions.needsRelaunchToSeeGrant`). Never twice within 30 seconds.
+    func relaunchToApplyPermission() {
+        let key = "lastPermissionRelaunch"
+        let last = defaults.double(forKey: key)
+        let now = Date().timeIntervalSince1970
+        guard now - last > 30 else { return }
+        defaults.set(now, forKey: key)
+        Logger(subsystem: "com.hornmicro.TouchGuard", category: "permissions")
+            .notice("Permission granted while running; relaunching so it takes effect")
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.createsNewApplicationInstance = true
+        NSWorkspace.shared.openApplication(at: Bundle.main.bundleURL, configuration: configuration) { _, _ in
+            DispatchQueue.main.async { NSApp.terminate(nil) }
         }
     }
 

@@ -68,8 +68,10 @@ struct PermissionView: View {
                 granted = now
                 if Permissions.isGranted {
                     model.permissionGranted()
-                } else if Permissions.needsRelaunchToSeeGrant {
+                } else if setupStarted && Permissions.needsRelaunchToSeeGrant {
                     // Granted in System Settings, but this process can't see it.
+                    // Only after Continue: probing by creating a tap makes macOS
+                    // show its permission prompt, which mustn't pop up unasked.
                     model.relaunchToApplyPermission()
                 } else if newlyGranted && setupStarted {
                     // One permission just came through: ask for the next one

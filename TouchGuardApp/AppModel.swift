@@ -30,6 +30,9 @@ final class AppModel {
         static let delayMs = "delayMs"
         static let enabled = "enabled"
         static let hotKeyEnabled = "hotKeyEnabled"
+        /// Set before a permission relaunch, so the new copy shows the
+        /// "TouchGuard is on" page once it's running.
+        static let setupSuccessPending = "setupSuccessPending"
     }
 
     private(set) var delayMs: Int
@@ -41,6 +44,9 @@ final class AppModel {
     private(set) var launchAtLoginError: String?
     /// Another app has Secure Event Input on, so key releases can't be seen.
     private(set) var secureInputActive = false
+    /// The permission window shows its "TouchGuard is on" page instead of the
+    /// steps, until it's closed.
+    private(set) var setupCompleted = false
 
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let controller: TapControlling
@@ -50,6 +56,8 @@ final class AppModel {
     @ObservationIgnored private var delayWindow: NSWindow?
     @ObservationIgnored private let isSecureInputEnabled: () -> Bool
     @ObservationIgnored private var secureInputTimer: Timer?
+    /// This copy was relaunched to apply a permission (App Store build).
+    @ObservationIgnored private var showSuccessWhenRunning = false
 
     static let secureInputCheckInterval: TimeInterval = 2
 
@@ -76,6 +84,8 @@ final class AppModel {
 
     /// Called once the app has finished launching.
     func start() {
+        showSuccessWhenRunning = defaults.bool(forKey: Key.setupSuccessPending)
+        defaults.removeObject(forKey: Key.setupSuccessPending)
         refreshLaunchAtLogin()
         updateHotKey()
         if isEnabled { controller.start() }
@@ -136,7 +146,12 @@ final class AppModel {
         state = newState
         switch newState {
         case .needsPermission: showPermissionWindow()
-        case .running: closePermissionWindow()
+        case .running:
+            // Setup was under way: say it worked instead of just vanishing.
+            if permissionWindow?.isVisible == true || showSuccessWhenRunning {
+                showSuccessWhenRunning = false
+                showSetupSuccess()
+            }
         case .paused, .failed: break
         }
     }
@@ -207,11 +222,12 @@ final class AppModel {
     // MARK: - Permission
 
     /// Called by the onboarding window as soon as it sees trust granted.
+    /// Once the tap is running, the window shows "TouchGuard is on".
     func permissionGranted() {
         if isEnabled {
             controller.checkHealth()
         } else {
-            closePermissionWindow()
+            showSetupSuccess()
         }
     }
 
@@ -224,6 +240,7 @@ final class AppModel {
         let now = Date().timeIntervalSince1970
         guard now - last > 30 else { return }
         defaults.set(now, forKey: key)
+        defaults.set(true, forKey: Key.setupSuccessPending)
         Logger(subsystem: "com.hornmicro.TouchGuard", category: "permissions")
             .notice("Permission granted while running; relaunching so it takes effect")
         let configuration = NSWorkspace.OpenConfiguration()
@@ -234,6 +251,16 @@ final class AppModel {
     }
 
     func showPermissionWindow() {
+        setupCompleted = false
+        permissionWindow = present(permissionWindow, title: "TouchGuard Permission") {
+            PermissionView(model: self)
+        }
+    }
+
+    /// Shows the permission window's last page and brings it in front of
+    /// System Settings, where the person just switched TouchGuard on.
+    func showSetupSuccess() {
+        setupCompleted = true
         permissionWindow = present(permissionWindow, title: "TouchGuard Permission") {
             PermissionView(model: self)
         }

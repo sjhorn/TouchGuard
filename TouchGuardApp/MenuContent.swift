@@ -4,6 +4,11 @@ struct MenuContent: View {
     let model: AppModel
 
     var body: some View {
+        if let version = model.updater.pendingUpdateVersion {
+            Button("Update Available: TouchGuard \(version)…") { model.updater.checkForUpdates() }
+            Divider()
+        }
+
         Text(model.statusText)
 
         if model.state == .running && model.secureInputActive {

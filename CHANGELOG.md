@@ -4,6 +4,14 @@ All notable changes are listed here. Versions follow [Semantic Versioning](https
 
 ## [Unreleased]
 
+## [2.0.2] - 2026-10-12
+
+### Changed
+- After you switch TouchGuard on in System Settings, the permission window stays open and confirms that TouchGuard is on, shows its new menu bar icon, and says you can close System Settings.
+
+### Fixed
+- When the daily update check finds a new version, the update window no longer opens unseen behind other apps. If TouchGuard can't show it in front, the update waits at the top of its menu as **Update Available**.
+
 ## [2.0.1] - 2026-10-12
 
 ### Fixed
@@ -41,7 +49,8 @@ A rewrite in Swift, with a menu bar app.
 
 The last release of the original TouchGuard by SyntaxSoft: a command-line tool run with `sudo`.
 
-[Unreleased]: https://github.com/sjhorn/TouchGuard/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/sjhorn/TouchGuard/compare/v2.0.2...HEAD
+[2.0.2]: https://github.com/sjhorn/TouchGuard/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/sjhorn/TouchGuard/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/sjhorn/TouchGuard/compare/1.4...v2.0.0
 [1.4]: https://github.com/sjhorn/TouchGuard/releases/tag/1.4

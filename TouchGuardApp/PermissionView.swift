@@ -10,6 +10,36 @@ struct PermissionView: View {
     private let mode = Permissions.mode
 
     var body: some View {
+        Group {
+            if model.setupCompleted {
+                SetupSuccessView(model: model)
+            } else {
+                setupSteps
+            }
+        }
+        .task {
+            while !Task.isCancelled {
+                let now = Self.currentGrants()
+                let newlyGranted = now.indices.contains { now[$0] && !granted[$0] }
+                granted = now
+                if Permissions.isGranted {
+                    if !model.setupCompleted { model.permissionGranted() }
+                } else if setupStarted && Permissions.needsRelaunchToSeeGrant {
+                    // Granted in System Settings, but this process can't see it.
+                    // Only after Continue: probing by creating a tap makes macOS
+                    // show its permission prompt, which mustn't pop up unasked.
+                    model.relaunchToApplyPermission()
+                } else if newlyGranted && setupStarted {
+                    // One permission just came through: ask for the next one
+                    // straight away instead of waiting for another click.
+                    await Permissions.continueSetup()
+                }
+                try? await Task.sleep(for: .seconds(1))
+            }
+        }
+    }
+
+    private var setupSteps: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
                 Image(systemName: "hand.raised.circle.fill")
@@ -67,26 +97,6 @@ struct PermissionView: View {
         }
         .padding(24)
         .frame(width: 440)
-        .task {
-            while !Task.isCancelled {
-                let now = Self.currentGrants()
-                let newlyGranted = now.indices.contains { now[$0] && !granted[$0] }
-                granted = now
-                if Permissions.isGranted {
-                    model.permissionGranted()
-                } else if setupStarted && Permissions.needsRelaunchToSeeGrant {
-                    // Granted in System Settings, but this process can't see it.
-                    // Only after Continue: probing by creating a tap makes macOS
-                    // show its permission prompt, which mustn't pop up unasked.
-                    model.relaunchToApplyPermission()
-                } else if newlyGranted && setupStarted {
-                    // One permission just came through: ask for the next one
-                    // straight away instead of waiting for another click.
-                    await Permissions.continueSetup()
-                }
-                try? await Task.sleep(for: .seconds(1))
-            }
-        }
     }
 
     private var title: LocalizedStringKey {
@@ -110,11 +120,11 @@ struct PermissionView: View {
         case .accessibility:
             ["Click **Continue**.",
              "When macOS asks, click **Open System Settings** and turn on **TouchGuard**.",
-             "This window closes by itself and blocking starts."]
+             "This window tells you when TouchGuard is on."]
         case .inputMonitoringAndPostEvent:
             ["Click **Continue**.",
              "When macOS asks, click **Open System Settings** and turn on **TouchGuard**.",
-             "This window closes by itself and blocking starts."]
+             "This window tells you when TouchGuard is on."]
         }
     }
 
@@ -156,4 +166,63 @@ struct PermissionView: View {
         case .listenEvents: "Input Monitoring"
         }
     }
+}
+
+/// The permission window's last page: it worked, and where TouchGuard lives now.
+struct SetupSuccessView: View {
+    let model: AppModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 12) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 40))
+                    .foregroundStyle(.green)
+                Text(isRunning ? "TouchGuard is on" : "Permission granted")
+                    .font(.title3.bold())
+            }
+
+            if isRunning {
+                Text("Trackpad clicks are now held back for \(model.delayMs) ms after you type, so a palm on the trackpad won't move the cursor.")
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text("TouchGuard is paused. Turn on **Enabled** in its menu to start blocking.")
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Text("You can close System Settings now.")
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 10) {
+                Image(systemName: "exclamationmark.triangle")
+                    .foregroundStyle(.secondary)
+                Image(systemName: "arrow.right")
+                    .foregroundStyle(.secondary)
+                Image(systemName: model.menuBarSymbol)
+                    .foregroundStyle(.tint)
+                Text("TouchGuard lives in the menu bar. Its icon has changed from the warning sign to a hand.")
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .font(.body)
+            .padding(10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
+
+            Text(model.hotKeyEnabled
+                 ? "Click the hand to change the delay, see how many clicks were blocked, or pause TouchGuard. You can also pause and resume from anywhere with ⌃⌥⌘T."
+                 : "Click the hand to change the delay, see how many clicks were blocked, or pause TouchGuard.")
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            HStack {
+                Spacer()
+                Button("Done") { model.closePermissionWindow() }
+                    .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding(24)
+        .frame(width: 440)
+    }
+
+    private var isRunning: Bool { model.state == .running }
 }

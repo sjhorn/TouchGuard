@@ -6,6 +6,24 @@
     <description>TouchGuard updates</description>
     <language>en</language>
     <item>
+      <title>Version 2.0.1</title>
+      <pubDate>Mon, 12 Oct 2026 07:13:38 GMT</pubDate>
+      <sparkle:version>59</sparkle:version>
+      <sparkle:shortVersionString>2.0.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description>&lt;h3&gt;Fixed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;On first launch, the permission window could open behind the app TouchGuard was launched from (for example Finder), so it was easy to miss. It now always opens in front.&lt;/li&gt;
+&lt;li&gt;Clicking the permission window's button opened System Settings and macOS's own permission prompt at the same time, leaving the prompt stranded behind Settings. The button is now &lt;b&gt;Continue&lt;/b&gt;: it asks for one permission at a time and opens System Settings only if macOS doesn't show its prompt.&lt;/li&gt;
+&lt;li&gt;In the Mac App Store version, switching on a permission in System Settings wasn't noticed until TouchGuard was restarted, so the permission window waited forever. TouchGuard now notices straight away and restarts itself once to apply it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Changed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;The permission window shows a checklist of the permissions TouchGuard needs and asks for the next one by itself.&lt;/li&gt;
+&lt;/ul&gt;</description>
+      <enclosure url="https://github.com/sjhorn/TouchGuard/releases/download/v2.0.1/TouchGuard-2.0.1.dmg" type="application/octet-stream" sparkle:edSignature="FLYgPkTOyu7FCT+qRHxKV0oGLUuQ5bEorfxt5QuEiaAdDhHcakT5BEYnYoZ4RWDKBw/g67BWgDT0MpgJsryeDw==" length="1455793" />
+    </item>
+    <item>
       <title>Version 2.0.0</title>
       <pubDate>Tue, 06 Oct 2026 16:51:04 GMT</pubDate>
       <sparkle:version>39</sparkle:version>

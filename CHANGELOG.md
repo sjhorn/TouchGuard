@@ -4,6 +4,8 @@ All notable changes are listed here. Versions follow [Semantic Versioning](https
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-10-12
+
 ### Fixed
 - On first launch, the permission window could open behind the app TouchGuard was launched from (for example Finder), so it was easy to miss. It now always opens in front.
 - Clicking the permission window's button opened System Settings and macOS's own permission prompt at the same time, leaving the prompt stranded behind Settings. The button is now **Continue**: it asks for one permission at a time and opens System Settings only if macOS doesn't show its prompt.
@@ -39,5 +41,7 @@ A rewrite in Swift, with a menu bar app.
 
 The last release of the original TouchGuard by SyntaxSoft: a command-line tool run with `sudo`.
 
+[Unreleased]: https://github.com/sjhorn/TouchGuard/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/sjhorn/TouchGuard/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/sjhorn/TouchGuard/compare/1.4...v2.0.0
 [1.4]: https://github.com/sjhorn/TouchGuard/releases/tag/1.4

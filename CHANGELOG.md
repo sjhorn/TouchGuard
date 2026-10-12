@@ -4,6 +4,9 @@ All notable changes are listed here. Versions follow [Semantic Versioning](https
 
 ## [Unreleased]
 
+### Fixed
+- When the daily update check finds a new version, the update window no longer opens unseen behind other apps. If TouchGuard can't show it in front, the update waits at the top of its menu as **Update Available**.
+
 ## [2.0.1] - 2026-10-12
 
 ### Fixed

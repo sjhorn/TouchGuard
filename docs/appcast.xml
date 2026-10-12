@@ -6,6 +6,22 @@
     <description>TouchGuard updates</description>
     <language>en</language>
     <item>
+      <title>Version 2.0.2</title>
+      <pubDate>Mon, 12 Oct 2026 10:34:28 GMT</pubDate>
+      <sparkle:version>64</sparkle:version>
+      <sparkle:shortVersionString>2.0.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description>&lt;h3&gt;Changed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;After you switch TouchGuard on in System Settings, the permission window stays open and confirms that TouchGuard is on, shows its new menu bar icon, and says you can close System Settings.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Fixed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;When the daily update check finds a new version, the update window no longer opens unseen behind other apps. If TouchGuard can't show it in front, the update waits at the top of its menu as &lt;b&gt;Update Available&lt;/b&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description>
+      <enclosure url="https://github.com/sjhorn/TouchGuard/releases/download/v2.0.2/TouchGuard-2.0.2.dmg" type="application/octet-stream" sparkle:edSignature="BY5/AS9iBoVstUzsyZA0kBdwsMDpeJtftCstg18L+/Ju5t0AEyyxJYEOft7UOOXnt151+BK6VMR/ZbNTsrouCQ==" length="1479503" />
+    </item>
+    <item>
       <title>Version 2.0.1</title>
       <pubDate>Mon, 12 Oct 2026 07:13:38 GMT</pubDate>
       <sparkle:version>59</sparkle:version>

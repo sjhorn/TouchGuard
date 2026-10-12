@@ -131,6 +131,12 @@ final class AppModelTests {
         #expect(model.statusText == "Paused")
     }
 
+    @Test func runningWithoutSetupShowsNoSuccessPage() {
+        let model = makeModel()
+        model.stateChanged(to: .running)
+        #expect(!model.setupCompleted)
+    }
+
     @Test func needsPermissionStatusMatchesMode() {
         let model = makeModel()
         // Going through stateChanged(to: .needsPermission) would open the onboarding window.

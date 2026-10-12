@@ -4,6 +4,9 @@ All notable changes are listed here. Versions follow [Semantic Versioning](https
 
 ## [Unreleased]
 
+### Changed
+- After you switch TouchGuard on in System Settings, the permission window stays open and confirms that TouchGuard is on, shows its new menu bar icon, and says you can close System Settings.
+
 ### Fixed
 - When the daily update check finds a new version, the update window no longer opens unseen behind other apps. If TouchGuard can't show it in front, the update waits at the top of its menu as **Update Available**.
 

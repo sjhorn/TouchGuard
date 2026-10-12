@@ -61,9 +61,11 @@ TouchGuard has to notice key releases and briefly hold back clicks, and macOS on
 | Version | Permission | Where |
 |---------|-----------|-------|
 | Download (Developer ID) | Accessibility | System Settings → Privacy & Security → Accessibility |
-| Mac App Store | Input Monitoring, plus Accessibility for holding back clicks | System Settings → Privacy & Security → Input Monitoring / Accessibility |
+| Mac App Store | Accessibility, and on some Macs Input Monitoring too | System Settings → Privacy & Security → Accessibility / Input Monitoring |
 
-On first launch a window explains this and opens the right Settings page. Once you turn TouchGuard on, the window closes by itself and blocking starts. If the permission is removed later, the window comes back. No administrator rights are needed.
+On macOS 27 the Accessibility list is called **Device Control and Data Access**.
+
+On first launch a window explains this. Click **Continue**; when macOS asks, click **Open System Settings** and turn on TouchGuard. The window then confirms that TouchGuard is on, and its menu bar icon changes from a warning sign to a hand. If the permission is removed later, the window comes back. Updates keep the permission, and no administrator rights are needed.
 
 If TouchGuard is listed as allowed but the window stays open, remove it from the list with **−** and add it again. This usually happens after replacing the app with a build signed differently.
 

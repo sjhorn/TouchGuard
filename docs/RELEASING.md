@@ -9,6 +9,18 @@ There are two channels:
 
 Both use the bundle ID `com.hornmicro.TouchGuard` and team `ZUKW8RPUVQ`.
 
+## Current status (12 October 2026)
+
+| Channel | Version | State |
+|---------|---------|-------|
+| Download (DMG, Sparkle) | 2.0.2 (build 64) | Released. Updating from 2.0.0 and 2.0.1 with Sparkle tested. |
+| Homebrew (`sjhorn/tap/touchguard`) | 2.0.2 | Released. |
+| Mac App Store | 2.0.0 (build 53) | Waiting for review, after answering App Review's Guideline 2.1 request ([reply](app-store/review-reply-2.1.md)). |
+
+Next for the store:
+- Once the review is finished, replace the "Private by design" screenshot with the current permission window: `scripts/appstore-upload-screenshots.sh <version id>` (screenshots can't be changed while a version is in review).
+- The next store version should be 2.0.2 or later, which adds the "TouchGuard is on" confirmation page. Upload it with `scripts/release.sh appstore`.
+
 ## One-time setup
 
 ### 1. App Store Connect API key
@@ -74,7 +86,11 @@ My Apps → **+** → New App: platform macOS, name **TouchGuard** (if it's take
    git tag v2.0.1 && git push origin v2.0.1
    ```
 3. The **Release** workflow archives the app, notarises it and the DMG, publishes the GitHub Release with the DMG, and commits the new `docs/appcast.xml` to `master`.
-4. Homebrew: the [sjhorn/homebrew-tap](https://github.com/sjhorn/homebrew-tap) **Update casks** workflow picks up the new release within a day. To update it straight away, run `gh workflow run update-casks.yml --repo sjhorn/homebrew-tap`.
+4. Homebrew: the [sjhorn/homebrew-tap](https://github.com/sjhorn/homebrew-tap) **Update casks** workflow picks up the new release within a day. To update it straight away, run `gh workflow run update-casks.yml --repo sjhorn/homebrew-tap` (needs a token with the `workflow` scope), or edit the cask by hand:
+   ```sh
+   gh release download v2.0.2 -R sjhorn/TouchGuard -p '*.dmg'
+   shasum -a 256 TouchGuard-2.0.2.dmg   # put this and the version in Casks/touchguard.rb, then commit and push
+   ```
 5. Store: run `scripts/release.sh appstore` locally. It signs with your Xcode account, which as account holder can create the Apple Distribution and Mac Installer Distribution certificates. The CI job (Actions → **Release** → Run workflow → `appstore`) only works with an **Admin** API key, because cloud-managed signing isn't available to App Manager keys ("Cloud signing permission error"). Then in App Store Connect, add the build to TestFlight and test it, and finally submit it for review.
 
 ### Locally

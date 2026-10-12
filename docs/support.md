@@ -16,7 +16,9 @@ To hold back a click, TouchGuard has to see that you just released a key and the
 
   ![TouchGuard in the Accessibility list, with its switch](images/systems-settings-accessibility.png)
 
-- Mac App Store version: **System Settings → Privacy & Security → Input Monitoring**, turn on TouchGuard, and also under **Accessibility**.
+- Mac App Store version: the same **Accessibility** list. On some Macs, macOS also asks for **Input Monitoring**; TouchGuard's window tells you when, and you turn it on the same way.
+
+On macOS 27, the Accessibility list is called **Device Control and Data Access**. Once TouchGuard is on, its window says so and you can close System Settings. Updates keep the permission.
 
 ### I turned the permission on, but the window won't go away.
 Select TouchGuard in the list, remove it with **−**, then add it again with **+** (or reopen TouchGuard). This happens when macOS remembers an older copy of the app.

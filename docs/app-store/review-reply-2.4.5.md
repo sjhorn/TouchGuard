@@ -40,7 +40,7 @@ Scott Horn
 
 ## Feedback Assistant request
 
-File this whatever the outcome (Feedback Assistant → macOS → New Feedback → "Suggestion"), and add the FB number to the reply if Apple asks for it.
+Filed on 16 October 2026 as **FB25210600**. Quote it if App Review asks.
 
 **Title:** Allow a sandboxed app to filter (drop) pointer events without the Accessibility permission
 

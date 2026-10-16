@@ -15,7 +15,7 @@ Both use the bundle ID `com.hornmicro.TouchGuard` and team `ZUKW8RPUVQ`.
 |---------|---------|-------|
 | Download (DMG, Sparkle) | 2.0.2 (build 64) | Released. Updating from 2.0.0 and 2.0.1 with Sparkle tested. |
 | Homebrew (`sjhorn/tap/touchguard`) | 2.0.2 | Released. |
-| Mac App Store | 2.0.0 (build 53) | Rejected on 13 October under Guideline 2.4.5 (Accessibility used for a non-accessibility purpose) and 1.5 (support URL). Replied with the accessibility case and added a support email ([reply](app-store/review-reply-2.4.5.md)). |
+| Mac App Store | 2.0.0 (build 53) | Rejected on 13 October under Guideline 2.4.5 (Accessibility used for a non-accessibility purpose) and 1.5 (support URL). Replied with the accessibility case, added a support email, and resubmitted on 16 October; waiting for review. Feedback Assistant request FB25210600 ([reply](app-store/review-reply-2.4.5.md)). |
 
 Next for the store:
 - If App Review accepts the 2.4.5 explanation: continue below. If it doesn't, drop the store channel. The download and Homebrew builds don't depend on it, and no code change can avoid Accessibility, because only an Accessibility-granted (post-event) event tap can drop a click.

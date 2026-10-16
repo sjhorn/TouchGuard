@@ -149,7 +149,7 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tes
 
 ## Support
 
-Questions, bugs and ideas: [open an issue](https://github.com/sjhorn/TouchGuard/issues/new/choose). Common questions are answered on the [support page](https://blog.hornmicro.com/TouchGuard/support/). Security reports: see [SECURITY.md](SECURITY.md). More in [SUPPORT.md](SUPPORT.md).
+Questions, bugs and ideas: [open an issue](https://github.com/sjhorn/TouchGuard/issues/new/choose) or email [touchguard@hornmicro.com](mailto:touchguard@hornmicro.com). Common questions are answered on the [support page](https://blog.hornmicro.com/TouchGuard/support/). Security reports: see [SECURITY.md](SECURITY.md). More in [SUPPORT.md](SUPPORT.md).
 
 ## Licence
 

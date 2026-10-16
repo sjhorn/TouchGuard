@@ -9,15 +9,16 @@ There are two channels:
 
 Both use the bundle ID `com.hornmicro.TouchGuard` and team `ZUKW8RPUVQ`.
 
-## Current status (12 October 2026)
+## Current status (16 October 2026)
 
 | Channel | Version | State |
 |---------|---------|-------|
 | Download (DMG, Sparkle) | 2.0.2 (build 64) | Released. Updating from 2.0.0 and 2.0.1 with Sparkle tested. |
 | Homebrew (`sjhorn/tap/touchguard`) | 2.0.2 | Released. |
-| Mac App Store | 2.0.0 (build 53) | Waiting for review, after answering App Review's Guideline 2.1 request ([reply](app-store/review-reply-2.1.md)). |
+| Mac App Store | 2.0.0 (build 53) | Rejected on 13 October under Guideline 2.4.5 (Accessibility used for a non-accessibility purpose) and 1.5 (support URL). Replied with the accessibility case and added a support email ([reply](app-store/review-reply-2.4.5.md)). |
 
 Next for the store:
+- If App Review accepts the 2.4.5 explanation: continue below. If it doesn't, drop the store channel. The download and Homebrew builds don't depend on it, and no code change can avoid Accessibility, because only an Accessibility-granted (post-event) event tap can drop a click.
 - Once the review is finished, replace the "Private by design" screenshot with the current permission window: `scripts/appstore-upload-screenshots.sh <version id>` (screenshots can't be changed while a version is in review).
 - The next store version should be 2.0.2 or later, which adds the "TouchGuard is on" confirmation page. Upload it with `scripts/release.sh appstore`.
 

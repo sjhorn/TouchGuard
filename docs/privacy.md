@@ -34,4 +34,4 @@ If this policy changes, the new version will be posted here with a new date. The
 
 ## Contact
 
-Questions about privacy: [open an issue](https://github.com/sjhorn/TouchGuard/issues/new) on GitHub.
+Questions about privacy: email [touchguard@hornmicro.com](mailto:touchguard@hornmicro.com) or [open an issue](https://github.com/sjhorn/TouchGuard/issues/new) on GitHub.

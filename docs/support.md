@@ -5,7 +5,14 @@ permalink: /support/
 
 # TouchGuard Support
 
-Can't find your answer here? [Open an issue on GitHub](https://github.com/sjhorn/TouchGuard/issues/new) and include your macOS version and TouchGuard version (menu → About TouchGuard).
+## Contact
+
+- **Email:** [touchguard@hornmicro.com](mailto:touchguard@hornmicro.com)
+- **GitHub:** [open an issue](https://github.com/sjhorn/TouchGuard/issues/new) if you have a GitHub account. Others can see and add to it.
+
+Please include your macOS version and TouchGuard version (menu → About TouchGuard), and whether you installed it from the App Store, the download or Homebrew.
+
+The answers below cover the most common questions.
 
 ## Frequently asked questions
 

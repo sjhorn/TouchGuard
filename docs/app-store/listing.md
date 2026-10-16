@@ -11,36 +11,40 @@ If "TouchGuard" is taken: **TouchGuard – Palm Rejection** (27).
 **Stop accidental trackpad taps** (29)
 
 ## Promotional text (≤170, can change without a review)
-Typing and your cursor jumps? TouchGuard holds back trackpad clicks for a moment after each key press, so a stray palm can't move your cursor. Free, private, tiny. (162)
+Tremor or unsteady hands? TouchGuard ignores trackpad taps for a moment after each key press, so an unintended touch can't move your cursor. Free and private. (158)
 
 ## Description (≤4000)
 
 ```
-TouchGuard stops accidental trackpad clicks while you type. When your palm brushes the trackpad mid-sentence, the tap is quietly ignored, so your cursor stays where you're writing.
+TouchGuard is an accessibility aid for people who touch the trackpad by accident while typing, for example because of tremor, limited fine motor control or arthritis. Each unintended tap moves the text cursor and sends your typing to the wrong place. TouchGuard ignores trackpad clicks for a short moment after each key press, so your cursor stays where you're writing.
+
+It works like macOS's Bounce Keys, which ignores unintended repeated key presses, but for the trackpad. Deliberate clicks work normally, the pointer still moves, and you keep using your trackpad.
 
 It lives in your menu bar, uses almost no resources, and never reads what you type.
 
 Features:
-• Holds back clicks for a short moment after each key release (50–1000 ms, default 200 ms)
+• Ignores clicks for a short moment after each key release (50–1000 ms, default 200 ms)
 • Pick a preset delay or fine-tune it with a slider; changes apply instantly
 • Turn it on or off from the menu bar or with ⌃⌥⌘T from anywhere
-• See how many accidental clicks it has caught
+• See how many unintended clicks it has caught
 • Launch at Login
 • Recovers by itself if macOS pauses it, so protection never silently stops
 
 Private by design:
-• TouchGuard only checks *that* a key was released, never which key or what you typed
+• TouchGuard only checks that a key was released, never which key or what you typed
 • No analytics, no accounts, no network access
 • Free and open source (MIT): github.com/sjhorn/TouchGuard
 
-Why permissions?
-To hold back a click, macOS requires you to allow TouchGuard under Input Monitoring and Accessibility. A short guide on first launch takes you straight to the right settings.
+Why the Accessibility permission?
+To stop an unintended click before it reaches other apps, macOS requires you to allow TouchGuard under Accessibility (and, on some Macs, Input Monitoring). A short guide on first launch takes you straight to the right setting.
+
+Support: touchguard@hornmicro.com
 
 Based on the original TouchGuard by SyntaxSoft (2016).
 ```
 
 ## Keywords (≤100, comma-separated, no spaces needed)
-`palm,rejection,trackpad,touchpad,typing,cursor,jump,tap,click,accidental,block,menu bar,laptop` (93)
+`accessibility,tremor,palm,rejection,trackpad,touchpad,typing,cursor,tap,click,accidental,motor` (94)
 
 ## Category
 - Primary: **Utilities**
@@ -50,9 +54,9 @@ Based on the original TouchGuard by SyntaxSoft (2016).
 - **Price:** Free. No in-app purchases in 2.0.0 (see "Monetisation" below).
 - **Age rating:** 4+ (no objectionable content).
 - **Copyright:** © 2026 Scott Horn
-- **Support URL:** https://blog.hornmicro.com/TouchGuard/support/
-- **Marketing URL:** https://blog.hornmicro.com/TouchGuard/
-- **Privacy Policy URL:** https://blog.hornmicro.com/TouchGuard/privacy/
+- **Support URL:** https://touchguard.hornmicro.com/support/
+- **Marketing URL:** https://touchguard.hornmicro.com/
+- **Privacy Policy URL:** https://touchguard.hornmicro.com/privacy/
 - **App Privacy label:** Data Not Collected
 - **Encryption:** none (`ITSAppUsesNonExemptEncryption = NO`)
 

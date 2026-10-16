@@ -2,7 +2,7 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
   <channel>
     <title>TouchGuard</title>
-    <link>https://blog.hornmicro.com/TouchGuard/appcast.xml</link>
+    <link>https://touchguard.hornmicro.com/appcast.xml</link>
     <description>TouchGuard updates</description>
     <language>en</language>
     <item>

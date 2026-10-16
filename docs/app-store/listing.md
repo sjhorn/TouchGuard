@@ -54,9 +54,9 @@ Based on the original TouchGuard by SyntaxSoft (2016).
 - **Price:** Free. No in-app purchases in 2.0.0 (see "Monetisation" below).
 - **Age rating:** 4+ (no objectionable content).
 - **Copyright:** © 2026 Scott Horn
-- **Support URL:** https://blog.hornmicro.com/TouchGuard/support/
-- **Marketing URL:** https://blog.hornmicro.com/TouchGuard/
-- **Privacy Policy URL:** https://blog.hornmicro.com/TouchGuard/privacy/
+- **Support URL:** https://touchguard.hornmicro.com/support/
+- **Marketing URL:** https://touchguard.hornmicro.com/
+- **Privacy Policy URL:** https://touchguard.hornmicro.com/privacy/
 - **App Privacy label:** Data Not Collected
 - **Encryption:** none (`ITSAppUsesNonExemptEncryption = NO`)
 

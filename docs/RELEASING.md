@@ -69,14 +69,14 @@ GitHub → sjhorn/TouchGuard → Settings → Secrets and variables → Actions 
 ### 6. GitHub settings
 - Settings → General → Features: turn on **Issues**. It's the support channel.
 - Settings → Pages: Source **Deploy from a branch**, branch `master`, folder `/docs`.
-  The site is served on the custom domain `blog.hornmicro.com`, which the `sjhorn.github.io` user site maps to. **The appcast URL `https://blog.hornmicro.com/TouchGuard/appcast.xml` is built into every installed copy and can't be changed afterwards**, so keep that domain and path serving `docs/` (or redirecting to it) for as long as old versions are in use.
-  Then check https://blog.hornmicro.com/TouchGuard/ and `/appcast.xml`.
+  The site is served on its own custom domain, `touchguard.hornmicro.com` (`docs/CNAME`; DNS: a `CNAME` record from `touchguard` to `sjhorn.github.io`). Versions 2.0.0–2.0.2 have the old appcast URL `https://blog.hornmicro.com/TouchGuard/appcast.xml` built in. GitHub redirects it to the new domain, because `blog.hornmicro.com` is the `sjhorn.github.io` user site's domain. **Keep that user site on `blog.hornmicro.com`, and keep this repo's Pages site on, for as long as those versions are in use.** The appcast URL in a shipped build can't be changed afterwards.
+  Then check https://touchguard.hornmicro.com/ and `/appcast.xml`.
 - Settings → Code security: turn on **Private vulnerability reporting** (used by SECURITY.md).
 - Optional: ask GitHub Support to detach the fork from `thesyntaxinator/TouchGuard` so it shows up in search and gets its own network.
 
 ### 7. App Store Connect app record (store channel only)
 My Apps → **+** → New App: platform macOS, name **TouchGuard** (if it's taken, see `docs/app-store/listing.md`), language English, bundle ID `com.hornmicro.TouchGuard`, SKU `touchguard`. Then:
-- App Privacy → **Data Not Collected**. Privacy Policy URL: https://blog.hornmicro.com/TouchGuard/privacy/
+- App Privacy → **Data Not Collected**. Privacy Policy URL: https://touchguard.hornmicro.com/privacy/
 - Fill in the listing from `docs/app-store/listing.md`, the screenshots from `screenshots.md`, and the review notes and video from `review-notes.md` / `demo-video.md`.
 
 ## Making a release

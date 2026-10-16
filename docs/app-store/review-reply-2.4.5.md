@@ -3,15 +3,16 @@
 Review of 13 October 2026, submission 3694cfcf-9c41-4d04-88e6-5af655c69273.
 
 Before replying:
-1. Check that the support page shows the email address: <https://blog.hornmicro.com/TouchGuard/support/>, and that mail to touchguard@hornmicro.com arrives.
-2. Replace the **Description** in App Store Connect with the one in [listing.md](listing.md). The text can be edited because the version was rejected.
-3. Paste the block below into the reply in App Store Connect, then resubmit the same build (53).
+1. Check that the support page shows the email address: <https://touchguard.hornmicro.com/support/>, and that mail to touchguard@hornmicro.com arrives.
+2. Change the URLs in App Store Connect to the new domain: **Support URL** and **Marketing URL** (on the version page) and **Privacy Policy URL** (App Privacy). The values are in [listing.md](listing.md).
+3. Replace the **Description** in App Store Connect with the one in [listing.md](listing.md). The text can be edited because the version was rejected.
+4. Paste the block below into the reply in App Store Connect, then resubmit the same build (53).
 
 ```
 Hello, and thank you for the review.
 
 GUIDELINE 1.5 - SUPPORT URL
-The support page at https://blog.hornmicro.com/TouchGuard/support/ now opens with a Contact section that gives a support email address (touchguard@hornmicro.com) as well as GitHub Issues, followed by answers to common questions. Before, it only offered GitHub Issues, which needs a GitHub account; I'm sorry about that.
+The support page at https://touchguard.hornmicro.com/support/ now opens with a Contact section that gives a support email address (touchguard@hornmicro.com) as well as GitHub Issues, followed by answers to common questions. Before, it only offered GitHub Issues, which needs a GitHub account; I'm sorry about that.
 
 GUIDELINE 2.4.5 - ACCESSIBILITY
 I believe TouchGuard uses Accessibility for an accessibility purpose, and I'd be grateful if you'd reconsider with the following in mind.

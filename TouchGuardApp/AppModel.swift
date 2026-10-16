@@ -324,8 +324,8 @@ final class AppModel {
 }
 
 enum Links {
-    static let secureInputHelp = URL(string: "https://blog.hornmicro.com/TouchGuard/support/#secure-input")!
+    static let secureInputHelp = URL(string: "https://touchguard.hornmicro.com/support/#secure-input")!
     static let repository = URL(string: "https://github.com/sjhorn/TouchGuard")!
-    static let support = URL(string: "https://blog.hornmicro.com/TouchGuard/support/")!
-    static let privacy = URL(string: "https://blog.hornmicro.com/TouchGuard/privacy/")!
+    static let support = URL(string: "https://touchguard.hornmicro.com/support/")!
+    static let privacy = URL(string: "https://touchguard.hornmicro.com/privacy/")!
 }
